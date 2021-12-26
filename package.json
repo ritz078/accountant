@@ -6,17 +6,26 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "studio": "prisma studio"
   },
   "dependencies": {
-    "next": "11.1.0",
+    "@prisma/client": "3.7.0",
+    "next": "12.0.7",
+    "next-auth": "^4.0.6",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
   "devDependencies": {
-    "@types/react": "17.0.18",
-    "eslint": "7.32.0",
-    "eslint-config-next": "11.1.0",
-    "typescript": "4.3.5"
+    "@tailwindcss/forms": "^0.4.0",
+    "@types/react": "17.0.38",
+    "autoprefixer": "^10.4.0",
+    "eslint": "8.5.0",
+    "eslint-config-next": "12.0.7",
+    "postcss": "^8.4.5",
+    "prettier": "^2.5.1",
+    "prisma": "3.7.0",
+    "tailwindcss": "^3.0.7",
+    "typescript": "4.5.4"
   }
 }
