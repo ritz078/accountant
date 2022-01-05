@@ -3,3 +3,4 @@ node_modules
 .env
 .idea
 .next
+yarn-error.log
