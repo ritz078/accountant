@@ -168,7 +168,7 @@ const Invoices: NextPage = () => {
         </nav>
       </div>
 
-      <div className="w-4/12">
+      <div>
         <InvoiceDetails />
       </div>
     </div>

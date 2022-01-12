@@ -1,9 +1,36 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/outline";
-import React, { Fragment } from "react";
+import React, { FC, Fragment } from "react";
 import classNames from "classnames";
 
-export const Select = ({
+export const onRenderOptionDefault = (
+  option: IOption,
+  { selected, active }: { selected: boolean; active: boolean }
+) => (
+  <>
+    <span
+      className={classNames(
+        selected ? "font-semibold" : "font-normal",
+        "block truncate"
+      )}
+    >
+      {option.name}
+    </span>
+
+    {selected ? (
+      <span
+        className={classNames(
+          active ? "text-white" : "text-indigo-600",
+          "absolute inset-y-0 right-0 flex items-center pr-4"
+        )}
+      >
+        <CheckIcon className="h-4 w-4" aria-hidden="true" />
+      </span>
+    ) : null}
+  </>
+);
+
+export function Select<T extends IOption = IOption>({
   value,
   onChange,
   options,
@@ -12,7 +39,10 @@ export const Select = ({
   required,
   labelClassName,
   buttonClassName,
-}: ISelectProps) => {
+  onRenderOption = onRenderOptionDefault,
+  onRenderLabel,
+  error,
+}: ISelectProps<T>) {
   return (
     <Listbox value={value} onChange={onChange}>
       {({ open }) => (
@@ -29,12 +59,15 @@ export const Select = ({
           <div className="mt-1 relative">
             <Listbox.Button
               className={classNames(
-                "bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
-                buttonClassName
+                "bg-white relative w-full border border-gray-200 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
+                buttonClassName,
+                {
+                  "border-red-500": error,
+                }
               )}
             >
               <span className="block truncate">
-                {value?.name || placeholder}
+                {onRenderLabel?.(value) || value?.name || placeholder}
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon
@@ -63,29 +96,9 @@ export const Select = ({
                     }
                     value={option}
                   >
-                    {({ selected, active }) => (
-                      <>
-                        <span
-                          className={classNames(
-                            selected ? "font-semibold" : "font-normal",
-                            "block truncate"
-                          )}
-                        >
-                          {option.name}
-                        </span>
-
-                        {selected ? (
-                          <span
-                            className={classNames(
-                              active ? "text-white" : "text-indigo-600",
-                              "absolute inset-y-0 right-0 flex items-center pr-4"
-                            )}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
-                      </>
-                    )}
+                    {({ selected, active }) =>
+                      onRenderOption(option, { selected, active })
+                    }
                   </Listbox.Option>
                 ))}
               </Listbox.Options>
@@ -95,20 +108,29 @@ export const Select = ({
       )}
     </Listbox>
   );
-};
+}
 
 export interface IOption {
   name: string;
   id: string | number;
 }
 
-interface ISelectProps {
-  onChange: (selected: IOption) => void;
-  options: IOption[];
-  value: IOption | null;
+interface ISelectProps<T> {
+  onChange: (selected: T) => void;
+  options: T[];
+  value?: T | null;
   placeholder?: string;
   label?: string;
   required?: boolean;
   labelClassName?: string;
   buttonClassName?: string;
+  onRenderOption?: (
+    option: T,
+    options: {
+      selected: boolean;
+      active: boolean;
+    }
+  ) => JSX.Element;
+  onRenderLabel?: (selected?: T | null) => JSX.Element | null;
+  error?: boolean | string;
 }
