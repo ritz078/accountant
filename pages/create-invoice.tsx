@@ -16,7 +16,7 @@ import classNames from "classnames";
 import { customers, items, taxPresets } from "../utils/fakeData";
 import { formatNumber } from "../utils/number";
 
-const CreateInvoice: NextPage = () => {
+const CreateInvoice: NextPage = ({ setShowAddTaxForm }) => {
   const [showAddItemModal, setShowAddItemModal] = useState(false);
 
   const formik = useFormik<IInvoice>({
@@ -326,7 +326,7 @@ const CreateInvoice: NextPage = () => {
                     currencySymbol={values.currency.symbol}
                     items={taxPresets}
                     applied={values.taxes}
-                    onCreate={() => {}}
+                    onCreate={() => setShowAddTaxForm(true)}
                     onToggle={(tax) => {
                       if (values.taxes.includes(tax)) {
                         setFieldValue(

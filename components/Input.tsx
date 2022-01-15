@@ -41,7 +41,7 @@ export const Input: FC<IInputProps> = ({
             {
               "mt-1": label,
               "pl-7": prefix,
-              "text-red-500": error,
+              "border-red-500": error,
             },
             inputClassName
           )}
