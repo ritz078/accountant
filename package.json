@@ -33,6 +33,8 @@
     "@types/faker": "^5.5.9",
     "@types/react": "17.0.38",
     "autoprefixer": "^10.4.2",
+    "commitizen": "^4.2.4",
+    "commitizen-emoji": "^1.0.5",
     "eslint": "8.6.0",
     "eslint-config-next": "12.0.8",
     "postcss": "^8.4.5",
