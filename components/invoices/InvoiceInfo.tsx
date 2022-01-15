@@ -7,27 +7,59 @@ import {
 import { Fragment, useState } from "react";
 import classNames from "classnames";
 import { AlertModal } from "../AlertModal";
+import { IInvoice } from "../../pages/create-invoice";
+import { format } from "date-fns";
+import { formatNumber } from "../../utils/number";
 
-export const InvoiceInfo = (props) => {
+export const InvoiceInfo = ({
+  position,
+  onClick,
+  ...invoice
+}: IInvoice & {
+  position: number;
+  onClick: (invoice: IInvoice) => void;
+}) => {
+  const { id, total, customer, currency, invoiceNumber, issueDate, status } =
+    invoice;
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   return (
     <>
       <tr
-        key={props.email}
-        className={props.position % 2 === 0 ? "bg-white" : "bg-gray-50"}
+        onClick={() => onClick(invoice)}
+        key={id}
+        className={classNames(
+          position % 2 === 0 ? "bg-white" : "bg-gray-50",
+          "cursor-pointer"
+        )}
       >
-        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-          {props.name}
+        <td className="pl-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+          <span
+            className={classNames(
+              "capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800",
+              {
+                "bg-yellow-100 text-yellow-600": status === "sent",
+                "bg-green-100 text-green-700": status === "paid",
+              }
+            )}
+          >
+            {status}
+          </span>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          {props.id}
+        <td className="pl-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+          {format(issueDate, "yyyy-MM-dd")}
         </td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          {props.email}
+        <td className="pl-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {invoiceNumber}
         </td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          {props.role}
+        <td className="pl-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {customer?.name}
+        </td>
+        <td className="pl-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <span className="inline-block min-w-5 mr-1 text-gray-400">
+            {currency.symbol}
+          </span>
+          {formatNumber(total)}
         </td>
         <td className="px-6 py-2.5 whitespace-nowrap text-right text-sm font-medium">
           <Menu as="div" className="relative inline-block text-left">

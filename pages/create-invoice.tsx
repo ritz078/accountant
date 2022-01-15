@@ -5,7 +5,7 @@ import React, { Fragment, useState } from "react";
 import { TrashIcon } from "@heroicons/react/outline";
 import { AddItem } from "../components/CreateInvoice/AddItem";
 import { Modal } from "../components/Modal";
-import { InvoiceItems } from "../components/InvoiceItems";
+import { AddItemForm } from "../components/AddItemForm";
 import { useFormik } from "formik";
 import { addDays, format } from "date-fns";
 import { CurrencySelect, ICurrency } from "../components/Select/CurrencySelect";
@@ -13,29 +13,8 @@ import { currencies } from "../utils/currency";
 import { AddTaxOrDiscount } from "../components/CreateInvoice/AddTaxOrDiscount";
 import { getAmount, getTotalInvoiceAmount, schema } from "../utils/invoice";
 import classNames from "classnames";
-
-const customers = [{ id: 1, name: "Wade Cooper" }];
-
-const items: IItem[] = [
-  {
-    id: 1,
-    name: "This is an item",
-    description: "lorem ipsum dolor sit amet consectetur adipisicing",
-    price: 1000,
-    quantity: 0,
-    discounts: [],
-    taxes: [],
-  },
-];
-
-const taxPresets: ITaxOrDiscount[] = [
-  {
-    id: 1,
-    name: "GST",
-    value: 10,
-    type: "percentage",
-  },
-];
+import { customers, items, taxPresets } from "../utils/fakeData";
+import { formatNumber } from "../utils/number";
 
 const CreateInvoice: NextPage = () => {
   const [showAddItemModal, setShowAddItemModal] = useState(false);
@@ -44,8 +23,8 @@ const CreateInvoice: NextPage = () => {
     initialValues: {
       id: 6,
       invoiceNumber: "INV-00006",
-      issueDate: format(new Date(), "yyyy-MM-dd"),
-      dueDate: format(new Date(addDays(new Date(), 14)), "yyyy-MM-dd"),
+      issueDate: new Date(),
+      dueDate: new Date(addDays(new Date(), 14)),
       notes: "",
       customer: null,
       items: [],
@@ -65,7 +44,7 @@ const CreateInvoice: NextPage = () => {
 
   return (
     <div className="flex flex-1 gap-4">
-      <div className="w-8/12 shrink-0 grow-0 overflow-hidden">
+      <div className="w-8/12 shrink-0 grow-0">
         <h3 className="text-lg leading-6 font-medium text-gray-900">
           Create Invoice
         </h3>
@@ -104,8 +83,10 @@ const CreateInvoice: NextPage = () => {
                     name="issueDate"
                     type="date"
                     className="flex flex-col flex-1"
-                    onChange={handleChange}
-                    value={values.issueDate}
+                    onChange={(e) =>
+                      setFieldValue("issueDate", new Date(e.target.value))
+                    }
+                    value={format(values.issueDate, "yyyy-MM-dd")}
                   />
 
                   <Input
@@ -114,8 +95,10 @@ const CreateInvoice: NextPage = () => {
                     name="dueDate"
                     type="date"
                     className="flex flex-col flex-1"
-                    onChange={handleChange}
-                    value={values.dueDate}
+                    onChange={(e) =>
+                      setFieldValue("dueDate", new Date(e.target.value))
+                    }
+                    value={format(values.dueDate, "yyyy-MM-dd")}
                   />
                 </div>
               </div>
@@ -243,7 +226,9 @@ const CreateInvoice: NextPage = () => {
                                   <td className="p-2 text-sm py-3 text-gray-500 text-right">
                                     <div className="pt-2">
                                       {currencySymbol}{" "}
-                                      {getAmount(price * quantity, taxes)}
+                                      {formatNumber(
+                                        getAmount(price * quantity, taxes)
+                                      )}
                                     </div>
 
                                     <TrashIcon
@@ -312,7 +297,8 @@ const CreateInvoice: NextPage = () => {
                   <div className="py-1 text-sm flex items-center justify-between">
                     <span className="font-medium">Subtotal</span>
                     <span className="text-base font-medium text-gray-700">
-                      {currencySymbol} {getTotalInvoiceAmount(values, false)}
+                      {currencySymbol}{" "}
+                      {formatNumber(getTotalInvoiceAmount(values, false))}
                     </span>
                   </div>
 
@@ -354,9 +340,10 @@ const CreateInvoice: NextPage = () => {
                   />
 
                   <div className="py-1 text-sm flex justify-between border-t border-gray-200">
-                    <span className="font-medium">Total</span>
+                    <span className="font-medium">Total Payable</span>
                     <span className="text-base font-medium text-gray-700">
-                      {currencySymbol} {getTotalInvoiceAmount(values)}
+                      {currencySymbol}{" "}
+                      {formatNumber(getTotalInvoiceAmount(values))}
                     </span>
                   </div>
                 </div>
@@ -388,7 +375,7 @@ const CreateInvoice: NextPage = () => {
             onClose={() => setShowAddItemModal(false)}
             className="-mt-10"
           >
-            <InvoiceItems onClose={() => setShowAddItemModal(false)} />
+            <AddItemForm onClose={() => setShowAddItemModal(false)} />
           </Modal>
         </div>
       </div>
@@ -424,38 +411,39 @@ const CreateInvoice: NextPage = () => {
 export default CreateInvoice;
 
 interface ICustomer {
-  id: number;
+  id: string;
   name: string;
+  email?: string;
 }
 
 export interface IItem {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   price: number;
-  currency?: string;
+  currency?: ICurrency;
   quantity: number;
   taxes: ITaxOrDiscount[];
-  discounts: ITaxOrDiscount[];
 }
 
 export interface ITaxOrDiscount {
-  id: number;
+  id: string;
   type: "percentage" | "fixed";
   name: string;
   value: number;
 }
 
 export interface IInvoice {
-  id: number;
-  invoiceNumber: string;
-  issueDate: string;
-  dueDate: string;
+  id: string;
+  createdAt: Date;
+  invoiceNumber: string | number;
+  issueDate: Date;
+  dueDate: Date;
   customer: ICustomer | null;
   notes: string;
   items: IItem[];
   taxes: ITaxOrDiscount[];
-  discounts: ITaxOrDiscount[];
   currency: ICurrency;
   total: number;
+  status: "draft" | "sent" | "paid";
 }

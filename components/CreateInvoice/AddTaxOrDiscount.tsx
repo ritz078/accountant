@@ -7,10 +7,10 @@ import { ITaxOrDiscount } from "../../pages/create-invoice";
 function getTaxLabel(tax: ITaxOrDiscount, currencySymbol?: string) {
   return (
     tax.name +
-    "-" +
+    " (" +
     (tax.type === "percentage"
-      ? `${tax.value}%`
-      : `${currencySymbol} ${tax.value}`)
+      ? `${tax.value}%)`
+      : `${currencySymbol} ${tax.value})`)
   );
 }
 
@@ -23,6 +23,7 @@ export function AddTaxOrDiscount({
   button,
   dropdownClassName,
 }: IAddTaxOrDiscountProps) {
+  console.log("AddTaxOrDiscount", items);
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -53,25 +54,22 @@ export function AddTaxOrDiscount({
       >
         <Menu.Items
           className={classNames(
-            "origin-top-left absolute left-0 z-10 mt-2 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none",
+            "origin-top-left absolute left-0 z-10 mt-2 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none max-h-64 overflow-y-auto bottom-10",
             dropdownClassName
           )}
         >
           <div className="py-1">
             {items.map((tax, index) => (
               <Menu.Item as={"div"} key={tax.id} onClick={() => onToggle(tax)}>
-                {items.map((tax) => (
-                  <div
-                    key={tax.id}
-                    className="flex cursor-pointer hover:bg-gray-50 flex-row items-center justify-between px-4 py-2"
-                  >
-                    <span>{getTaxLabel(tax, currencySymbol)}</span>
+                <div className="flex cursor-pointer hover:bg-gray-50 flex-row items-center justify-between px-4 py-2">
+                  <span className="text-sm">
+                    {getTaxLabel(tax, currencySymbol)}
+                  </span>
 
-                    {applied.some((aTax) => aTax.id === tax.id) && (
-                      <CheckIcon className="w-5 h-5" />
-                    )}
-                  </div>
-                ))}
+                  {applied.some((aTax) => aTax.id === tax.id) && (
+                    <CheckIcon className="w-5 h-5" />
+                  )}
+                </div>
               </Menu.Item>
             ))}
 

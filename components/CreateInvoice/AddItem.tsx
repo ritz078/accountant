@@ -3,6 +3,7 @@ import { PlusIcon, PlusSmIcon } from "@heroicons/react/outline";
 import React, { FC, Fragment } from "react";
 import classNames from "classnames";
 import { IItem } from "../../pages/create-invoice";
+import { formatNumber } from "../../utils/number";
 
 export const AddItem: FC<IAddItemProps> = ({
   items,
@@ -35,7 +36,7 @@ export const AddItem: FC<IAddItemProps> = ({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-left absolute left-0 z-10 mt-2 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="origin-top-left absolute left-0 z-10 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none max-h-72 overflow-y-auto">
           <div className="py-1">
             {items.map((item, index) => (
               <Menu.Item
@@ -43,28 +44,16 @@ export const AddItem: FC<IAddItemProps> = ({
                 key={item.id}
                 onClick={() => onSelect(item)}
               >
-                {items.map((position) => (
-                  <div
-                    key={position.id}
-                    className="px-4 py-2 hover:bg-gray-50 cursor-pointer"
-                  >
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium truncate">
-                        {position.name}
-                      </p>
-                      <div className="ml-2 flex-shrink-0 flex">
-                        <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          $ {position.price}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mt-2">
-                      <p className="flex items-center text-sm text-gray-500">
-                        {position.description}
+                <div className="px-4 py-2 hover:bg-gray-50 cursor-pointer">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium truncate">{item.name}</p>
+                    <div className="ml-2 flex-shrink-0 flex">
+                      <p className="text-sm text-gray-400">
+                        $ {formatNumber(item.price)}
                       </p>
                     </div>
                   </div>
-                ))}
+                </div>
               </Menu.Item>
             ))}
 

@@ -61,7 +61,7 @@ interface IInputProps {
   label?: string;
   placeholder?: string;
   className?: string;
-  onChange: React.ChangeEventHandler;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
   inputClassName?: string;
   value?: string | number;
   required?: boolean;

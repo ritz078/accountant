@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <div className="flex sm:flex-row">
       <NextProgress options={{ showSpinner: false }} />
       <Sidebar />
-      <main className="bg-gray-200 flex flex-1 min-h-screen p-5">
+      <main className="bg-zinc-100 flex flex-1 min-h-screen p-5">
         <Component {...pageProps} />
       </main>
     </div>

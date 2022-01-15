@@ -2,7 +2,7 @@ import { Input } from "./Input";
 import React from "react";
 import { XIcon } from "@heroicons/react/outline";
 
-export const InvoiceItems: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
+export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
   return (
     <>
       <div className="flex justify-between flex-row mb-3 pb-3 border-b border-gray-200">
@@ -91,15 +91,6 @@ export const InvoiceItems: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
           className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
         >
           Save and Add Item
-        </button>
-        <button
-          type="button"
-          className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-          onClick={() => {
-            onClose();
-          }}
-        >
-          Add Item
         </button>
       </div>
     </>

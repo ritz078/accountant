@@ -3,22 +3,76 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
 import { InvoiceDetails } from "../components/invoices/InvoiceDetails";
 import { InvoiceInfo } from "../components/invoices/InvoiceInfo";
 import Link from "next/link";
-import { invoices } from "../utils/fakeData";
-import { useState } from "react";
-import { IInvoice } from "./create-invoice";
-import { Transition } from "@headlessui/react";
+
+const people = [
+  {
+    name: "Jane Cooper",
+    title: "Regional Paradigm Technician",
+    role: "Admin",
+    email: "jane.cooper@example.com",
+    id: 1,
+  },
+  {
+    name: "Cody Fisher",
+    title: "Product Directives Officer",
+    role: "Owner",
+    email: "cody.fisher@example.com",
+    id: 1,
+  },
+  {
+    name: "Jane Cooper",
+    title: "Regional Paradigm Technician",
+    role: "Admin",
+    email: "jane.cooper@example.com",
+    id: 1,
+  },
+  {
+    name: "Cody Fisher",
+    title: "Product Directives Officer",
+    role: "Owner",
+    email: "cody.fisher@example.com",
+    id: 1,
+  },
+  {
+    name: "Jane Cooper",
+    title: "Regional Paradigm Technician",
+    role: "Admin",
+    email: "jane.cooper@example.com",
+    id: 1,
+  },
+  {
+    name: "Cody Fisher",
+    title: "Product Directives Officer",
+    role: "Owner",
+    email: "cody.fisher@example.com",
+    id: 1,
+  },
+  {
+    name: "Jane Cooper",
+    title: "Regional Paradigm Technician",
+    role: "Admin",
+    email: "jane.cooper@example.com",
+    id: 1,
+  },
+  {
+    name: "Cody Fisher",
+    title: "Product Directives Officer",
+    role: "Owner",
+    email: "cody.fisher@example.com",
+    id: 1,
+  },
+  // More people...
+];
 
 const Invoices: NextPage = () => {
-  const [invoice, setInvoice] = useState<IInvoice | null>(null);
-
   return (
-    <div className="flex flex-row flex-1">
+    <div className="flex flex-row">
       <div className="bg-white overflow-hidden shadow rounded-lg h-fit w-8/12 flex-col shrink-0">
         <div className="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
           <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
             <div className="ml-4 mt-2">
               <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Invoices
+                Expenses
               </h3>
             </div>
             <div className="ml-4 mt-2 flex-shrink-0">
@@ -27,7 +81,7 @@ const Invoices: NextPage = () => {
                   type="button"
                   className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  Create new invoice
+                  Add new expense
                 </button>
               </Link>
             </div>
@@ -41,43 +95,41 @@ const Invoices: NextPage = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="pl-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" />
                       <th
                         scope="col"
-                        className="pl-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         Date
                       </th>
                       <th
                         scope="col"
-                        className="pl-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         #
                       </th>
                       <th
                         scope="col"
-                        className="pl-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         Customer
                       </th>
                       <th
                         scope="col"
-                        className="pl-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         Amount
                       </th>
-                      <th scope="col" className="relative pl-6 py-3">
+                      <th scope="col" className="relative px-6 py-3">
                         <span className="sr-only">Edit</span>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {invoices.map((invoice, personIdx) => (
+                    {people.map((person, personIdx) => (
                       <InvoiceInfo
-                        key={invoice.id}
+                        key={personIdx}
                         position={personIdx}
-                        onClick={(invoice) => setInvoice(invoice)}
-                        {...invoice}
+                        {...person}
                       />
                     ))}
                   </tbody>
@@ -115,20 +167,9 @@ const Invoices: NextPage = () => {
         </nav>
       </div>
 
-      <Transition
-        show={!!invoice}
-        className="4/12 shrink-0 flex flex-1 relative"
-        enter="transition-all duration-100"
-        enterFrom="opacity-0 translate-y-4"
-        enterTo="opacity-100 translate-y-0"
-        leave="transition-all"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-      >
-        <div>
-          <InvoiceDetails {...(invoice as IInvoice)} />
-        </div>
-      </Transition>
+      <div>
+        <InvoiceDetails />
+      </div>
     </div>
   );
 };

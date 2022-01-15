@@ -112,7 +112,7 @@ export function Select<T extends IOption = IOption>({
 
 export interface IOption {
   name: string;
-  id: string | number;
+  id: string;
 }
 
 interface ISelectProps<T> {
