@@ -23,7 +23,6 @@ export function AddTaxOrDiscount({
   button,
   dropdownClassName,
 }: IAddTaxOrDiscountProps) {
-  console.log("AddTaxOrDiscount", items);
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>

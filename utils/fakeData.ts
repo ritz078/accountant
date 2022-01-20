@@ -72,7 +72,7 @@ export const items: IItem[] = new Array(5).fill(null).map(() => ({
   })),
 }));
 
-export const customers = new Array(10).fill(null).map(() => ({
+export const customers = new Array(5).fill(null).map(() => ({
   id: faker.datatype.uuid(),
   name: faker.name.findName(),
   address: faker.address.streetAddress(),

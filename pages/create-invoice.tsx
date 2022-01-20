@@ -16,7 +16,10 @@ import classNames from "classnames";
 import { customers, items, taxPresets } from "../utils/fakeData";
 import { formatNumber } from "../utils/number";
 
-const CreateInvoice: NextPage = ({ setShowAddTaxForm }) => {
+const CreateInvoice: NextPage = ({
+  setShowAddTaxForm,
+  setShowAddCustomerForm,
+}) => {
   const [showAddItemModal, setShowAddItemModal] = useState(false);
 
   const formik = useFormik<IInvoice>({
@@ -62,6 +65,7 @@ const CreateInvoice: NextPage = ({ setShowAddTaxForm }) => {
                     options={customers}
                     placeholder="Select your customer"
                     buttonClassName="shadow-none"
+                    onAdd={() => setShowAddCustomerForm(true)}
                   />
                 </div>
 

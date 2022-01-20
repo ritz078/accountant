@@ -1,5 +1,5 @@
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, SelectorIcon } from "@heroicons/react/outline";
+import { CheckIcon, PlusIcon, SelectorIcon } from "@heroicons/react/outline";
 import React, { FC, Fragment } from "react";
 import classNames from "classnames";
 
@@ -17,16 +17,14 @@ export const onRenderOptionDefault = (
       {option.name}
     </span>
 
-    {selected ? (
-      <span
-        className={classNames(
-          active ? "text-white" : "text-indigo-600",
-          "absolute inset-y-0 right-0 flex items-center pr-4"
-        )}
-      >
-        <CheckIcon className="h-4 w-4" aria-hidden="true" />
-      </span>
-    ) : null}
+    <span
+      className={classNames(
+        active ? "text-white" : "text-gray-600",
+        "absolute inset-y-0 right-0 flex items-center pr-4"
+      )}
+    >
+      {(option as any).symbol}
+    </span>
   </>
 );
 
@@ -42,6 +40,7 @@ export function Select<T extends IOption = IOption>({
   onRenderOption = onRenderOptionDefault,
   onRenderLabel,
   error,
+  onAdd,
 }: ISelectProps<T>) {
   return (
     <Listbox value={value} onChange={onChange}>
@@ -59,7 +58,7 @@ export function Select<T extends IOption = IOption>({
           <div className="mt-1 relative">
             <Listbox.Button
               className={classNames(
-                "bg-white relative w-full border border-gray-200 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
+                "bg-white relative w-full border border-gray-200 rounded-md shadow-sm pl-3 pr-10 py-2.5 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
                 buttonClassName,
                 {
                   "border-red-500": error,
@@ -79,7 +78,6 @@ export function Select<T extends IOption = IOption>({
 
             <Transition
               show={open}
-              as={Fragment}
               leave="transition ease-in duration-100"
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
@@ -101,6 +99,16 @@ export function Select<T extends IOption = IOption>({
                     }
                   </Listbox.Option>
                 ))}
+
+                {onAdd && (
+                  <span
+                    onClick={onAdd}
+                    className="flex flex-row cursor-pointer border-t text-sm font-medium hover:!text-white hover:bg-indigo-600 !text-indigo-600 select-none relative py-2 pl-3 pr-9 items-center"
+                  >
+                    <PlusIcon className="h-4 w-4 mr-2" aria-hidden="true" /> Add
+                    new
+                  </span>
+                )}
               </Listbox.Options>
             </Transition>
           </div>
@@ -133,4 +141,5 @@ interface ISelectProps<T> {
   ) => JSX.Element;
   onRenderLabel?: (selected?: T | null) => JSX.Element | null;
   error?: boolean | string;
+  onAdd?: () => void;
 }

@@ -7,7 +7,5 @@ export const currencies = currencyData
     id: datum.code,
     symbol: getSymbolFromCurrency(datum.code),
   }))
+  .filter((datum) => ["USD", "EUR", "INR"].includes(datum.id))
   .sort((a, b) => a.name.localeCompare(b.name));
-
-export const getCurrencySymbol = (currency: string) =>
-  getSymbolFromCurrency(currency);

@@ -4,7 +4,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import classNames from "classnames";
 
-export const AddTaxPreset: FC = ({ onClose }) => {
+export const AddTaxPreset: FC<{
+  onClose: () => void;
+}> = ({ onClose }) => {
   const formik = useFormik({
     initialValues: {
       type: "percentage",
@@ -21,8 +23,6 @@ export const AddTaxPreset: FC = ({ onClose }) => {
     }),
     validateOnMount: true,
   });
-
-  console.log(formik);
 
   return (
     <div className="flex flex-1 flex-col">

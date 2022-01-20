@@ -2,9 +2,16 @@ import { onRenderOptionDefault, Select } from "./Select";
 import { FC } from "react";
 import { currencies } from "../../utils/currency";
 
-export const CurrencySelect: FC<ICurrencySelect> = ({ onChange, value }) => {
+export const CurrencySelect: FC<ICurrencySelect> = ({
+  onChange,
+  value,
+  label,
+}) => {
   return (
     <Select<ICurrency>
+      required={!!label}
+      label={label}
+      placeholder={`Select currency`}
       onChange={onChange}
       options={currencies}
       value={value}
@@ -39,4 +46,5 @@ export interface ICurrency {
 interface ICurrencySelect {
   onChange: (value: ICurrency) => void;
   value: ICurrency;
+  label?: string;
 }
