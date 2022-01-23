@@ -1,21 +1,20 @@
 import { Input } from "./Input";
-import React from "react";
+import React, { FC } from "react";
 import classNames from "classnames";
 import { CurrencySelect, ICurrency } from "./Select/CurrencySelect";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { currencies } from "@/utils/currency";
 
-export const AddCustomer = () => {
+export const AddCustomer: FC<{
+  onClose: () => void;
+}> = ({ onClose }) => {
   const formik = useFormik<ICustomer>({
     initialValues: {
       name: "",
       email: "",
       phone: "",
-      currency: {
-        id: "",
-        name: "",
-        symbol: "",
-      },
+      currency: currencies[0],
       address: {
         line1: "",
         city: "",
@@ -190,6 +189,7 @@ export const AddCustomer = () => {
 
       <div className="flex-shrink-0 px-4 py-4 flex justify-end border-t">
         <button
+          onClick={onClose}
           type="button"
           className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >

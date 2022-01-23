@@ -1,7 +1,7 @@
 import faker from "@faker-js/faker";
 import { IInvoice, IItem, ITaxOrDiscount } from "../pages/create-invoice";
 
-export const invoices: IInvoice[] = new Array(10).fill(null).map(() => ({
+export const invoices: IInvoice[] = new Array(15).fill(null).map(() => ({
   id: faker.datatype.uuid(),
   invoiceNumber: faker.datatype.number(100),
   issueDate: faker.date.past(),

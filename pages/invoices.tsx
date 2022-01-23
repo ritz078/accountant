@@ -1,12 +1,12 @@
 import { NextPage } from "next";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
-import { InvoiceDetails } from "../components/invoices/InvoiceDetails";
-import { InvoiceInfo } from "../components/invoices/InvoiceInfo";
+import { InvoiceDetails } from "@/components/invoices/InvoiceDetails";
+import { InvoiceInfo } from "@/components/invoices/InvoiceInfo";
 import Link from "next/link";
-import { invoices } from "../utils/fakeData";
+import { invoices } from "@/utils/fakeData";
 import { useState } from "react";
-import { IInvoice } from "./create-invoice";
 import { Transition } from "@headlessui/react";
+import { IInvoice } from "@/types/invoice";
 
 const Invoices: NextPage = () => {
   const [invoice, setInvoice] = useState<IInvoice | null>(null);
@@ -37,7 +37,7 @@ const Invoices: NextPage = () => {
         <div className="flex flex-col">
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-              <div className="overflow-hidden border-b border-gray-200">
+              <div className="border-b border-gray-200">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
@@ -117,7 +117,7 @@ const Invoices: NextPage = () => {
 
       <Transition
         show={!!invoice}
-        className="4/12 shrink-0 flex flex-1 relative"
+        className="4/12 shrink-0 relative flex flex-1"
         enter="transition-all duration-100"
         enterFrom="opacity-0 translate-y-4"
         enterTo="opacity-100 translate-y-0"
@@ -125,9 +125,7 @@ const Invoices: NextPage = () => {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div>
-          <InvoiceDetails {...(invoice as IInvoice)} />
-        </div>
+        <InvoiceDetails {...(invoice as IInvoice)} />
       </Transition>
     </div>
   );

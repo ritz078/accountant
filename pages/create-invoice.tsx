@@ -1,25 +1,26 @@
 import { NextPage } from "next";
-import { Select } from "../components/Select/Select";
-import { Input } from "../components/Input";
+import { Select } from "@/components/Select/Select";
+import { Input } from "@/components/Input";
 import React, { Fragment, useState } from "react";
-import { TrashIcon } from "@heroicons/react/outline";
-import { AddItem } from "../components/CreateInvoice/AddItem";
-import { Modal } from "../components/Modal";
-import { AddItemForm } from "../components/AddItemForm";
+import { PlusSmIcon, TrashIcon } from "@heroicons/react/outline";
+import { AddItem } from "@/components/CreateInvoice/AddItem";
+import { AddItemForm } from "@/components/AddItemForm";
 import { useFormik } from "formik";
 import { addDays, format } from "date-fns";
-import { CurrencySelect, ICurrency } from "../components/Select/CurrencySelect";
-import { currencies } from "../utils/currency";
-import { AddTaxOrDiscount } from "../components/CreateInvoice/AddTaxOrDiscount";
-import { getAmount, getTotalInvoiceAmount, schema } from "../utils/invoice";
+import { CurrencySelect } from "@/components/Select/CurrencySelect";
+import { currencies } from "@/utils/currency";
+import { AddTaxOrDiscount } from "@/components/CreateInvoice/AddTaxOrDiscount";
+import { getAmount, getTotalInvoiceAmount, schema } from "@/utils/invoice";
 import classNames from "classnames";
-import { customers, items, taxPresets } from "../utils/fakeData";
-import { formatNumber } from "../utils/number";
+import { customers, items, taxPresets } from "@/utils/fakeData";
+import { formatNumber } from "@/utils/number";
+import { IInvoice } from "@/types/invoice";
+import { SlideOver } from "@/components/SlideOver";
 
-const CreateInvoice: NextPage = ({
-  setShowAddTaxForm,
-  setShowAddCustomerForm,
-}) => {
+const CreateInvoice: NextPage<{
+  setShowAddTaxForm: (show: boolean) => void;
+  setShowAddCustomerForm: (show: boolean) => void;
+}> = ({ setShowAddTaxForm, setShowAddCustomerForm }) => {
   const [showAddItemModal, setShowAddItemModal] = useState(false);
 
   const formik = useFormik<IInvoice>({
@@ -55,18 +56,29 @@ const CreateInvoice: NextPage = ({
           <div className="flex flex-1 flex-col overflow-x-hidden">
             <div className="my-6 relative px-4 sm:px-6">
               <div className="flex flex-row justify-between gap-28">
-                <div className="w-1/2 h-fit">
-                  <Select
-                    error={!!(touched.customer && errors.customer)}
-                    label="Customer"
-                    required
-                    onChange={(selected) => setFieldValue("customer", selected)}
-                    value={values.customer}
-                    options={customers}
-                    placeholder="Select your customer"
-                    buttonClassName="shadow-none"
-                    onAdd={() => setShowAddCustomerForm(true)}
-                  />
+                <div className="w-1/2 h-fit flex flex-row gap-2">
+                  <div className="flex flex-1 flex-col">
+                    <Select
+                      error={!!(touched.customer && errors.customer)}
+                      label="Customer"
+                      required
+                      onChange={(selected) =>
+                        setFieldValue("customer", selected)
+                      }
+                      value={values.customer}
+                      options={customers}
+                      placeholder="Select your customer"
+                      buttonClassName="shadow-none"
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => setShowAddCustomerForm(true)}
+                    type="button"
+                    className="inline-flex self-end h-fit items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
+                  </button>
                 </div>
 
                 <div className="flex flex-col gap-2 flex-1">
@@ -374,13 +386,13 @@ const CreateInvoice: NextPage = ({
             </div>
           </div>
 
-          <Modal
+          <SlideOver
             open={showAddItemModal}
             onClose={() => setShowAddItemModal(false)}
-            className="-mt-10"
+            title="Add Item"
           >
             <AddItemForm onClose={() => setShowAddItemModal(false)} />
-          </Modal>
+          </SlideOver>
         </div>
       </div>
 
@@ -413,41 +425,3 @@ const CreateInvoice: NextPage = ({
 };
 
 export default CreateInvoice;
-
-interface ICustomer {
-  id: string;
-  name: string;
-  email?: string;
-}
-
-export interface IItem {
-  id: string;
-  name: string;
-  description?: string;
-  price: number;
-  currency?: ICurrency;
-  quantity: number;
-  taxes: ITaxOrDiscount[];
-}
-
-export interface ITaxOrDiscount {
-  id: string;
-  type: "percentage" | "fixed";
-  name: string;
-  value: number;
-}
-
-export interface IInvoice {
-  id: string;
-  createdAt: Date;
-  invoiceNumber: string | number;
-  issueDate: Date;
-  dueDate: Date;
-  customer: ICustomer | null;
-  notes: string;
-  items: IItem[];
-  taxes: ITaxOrDiscount[];
-  currency: ICurrency;
-  total: number;
-  status: "draft" | "sent" | "paid";
-}

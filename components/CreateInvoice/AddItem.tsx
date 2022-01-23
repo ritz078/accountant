@@ -2,8 +2,8 @@ import { Menu, Transition } from "@headlessui/react";
 import { PlusIcon, PlusSmIcon } from "@heroicons/react/outline";
 import React, { FC, Fragment } from "react";
 import classNames from "classnames";
-import { IItem } from "../../pages/create-invoice";
-import { formatNumber } from "../../utils/number";
+import { formatNumber } from "@/utils/number";
+import { IItem } from "@/types/invoice";
 
 export const AddItem: FC<IAddItemProps> = ({
   items,

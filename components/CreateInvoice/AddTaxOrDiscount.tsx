@@ -1,8 +1,8 @@
 import { Menu, Transition } from "@headlessui/react";
 import { CheckIcon, PlusIcon } from "@heroicons/react/outline";
-import React, { FC, Fragment } from "react";
+import React, { Fragment } from "react";
 import classNames from "classnames";
-import { ITaxOrDiscount } from "../../pages/create-invoice";
+import { ITaxOrDiscount } from "@/types/invoice";
 
 function getTaxLabel(tax: ITaxOrDiscount, currencySymbol?: string) {
   return (

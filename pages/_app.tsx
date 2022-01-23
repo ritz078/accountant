@@ -1,15 +1,17 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import NextProgress from "next-progress";
-import { Sidebar } from "../components/Sidebar/Sidebar";
-import { SlideOver } from "../components/SlideOver";
+import { Sidebar } from "@/components/Sidebar/Sidebar";
+import { SlideOver } from "@/components/SlideOver";
 import React from "react";
-import { AddTaxPreset } from "../components/AddTaxPreset";
-import { AddCustomer } from "../components/AddCustomer";
+import { AddTaxPreset } from "@/components/AddTaxPreset";
+import { AddCustomer } from "@/components/AddCustomer";
+import { AddItemForm } from "@/components/AddItemForm";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [showAddTaxForm, setShowAddTaxForm] = React.useState(false);
   const [showAddCustomerForm, setShowAddCustomerForm] = React.useState(false);
+  const [showAddItemForm, setShowAddItemForm] = React.useState(false);
 
   return (
     <div className="flex sm:flex-row">
@@ -20,6 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           {...pageProps}
           setShowAddTaxForm={setShowAddTaxForm}
           setShowAddCustomerForm={setShowAddCustomerForm}
+          setShowAddItemForm={setShowAddItemForm}
         />
       </main>
 
@@ -38,7 +41,21 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
         <AddCustomer onClose={() => setShowAddCustomerForm(false)} />
       </SlideOver>
+
+      <SlideOver
+        open={showAddItemForm}
+        onClose={() => setShowAddItemForm(false)}
+        title="Add Item"
+      >
+        <AddItemForm onClose={() => setShowAddItemForm(false)} />
+      </SlideOver>
     </div>
   );
 }
 export default MyApp;
+
+export interface ComponentProps {
+  setShowAddTaxForm: (show: boolean) => void;
+  setShowAddCustomerForm: (show: boolean) => void;
+  setShowAddItemForm: (show: boolean) => void;
+}

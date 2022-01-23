@@ -7,9 +7,9 @@ import {
 import { Fragment, useState } from "react";
 import classNames from "classnames";
 import { AlertModal } from "../AlertModal";
-import { IInvoice } from "../../pages/create-invoice";
 import { format } from "date-fns";
-import { formatNumber } from "../../utils/number";
+import { formatNumber } from "@/utils/number";
+import { IInvoice } from "@/types/invoice";
 
 export const InvoiceInfo = ({
   position,

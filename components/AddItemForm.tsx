@@ -1,36 +1,33 @@
 import { Input } from "./Input";
 import React from "react";
-import { XIcon } from "@heroicons/react/outline";
+import { useFormik } from "formik";
+import { IItem } from "@/types/invoice";
 
 export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
+  const formik = useFormik<Partial<IItem>>({
+    initialValues: {},
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
   return (
-    <>
-      <div className="flex justify-between flex-row mb-3 pb-3 border-b border-gray-200">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
-          Add a New Item
-        </h3>
-        <button
-          type="button"
-          className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={() => onClose()}
-        >
-          <span className="sr-only">Close</span>
-          <XIcon className="h-6 w-6" aria-hidden="true" />
-        </button>
-      </div>
+    <div className="px-4 sm:px-6">
       <Input
         name="name"
         type="text"
         label="Item Name"
         className="mt-3"
-        onChange={() => {}}
+        onChange={formik.handleChange}
+        value={formik.values.name}
       />
       <Input
         name="description"
         type="text"
         label="Description"
         className="mt-3"
-        onChange={() => {}}
+        onChange={formik.handleChange}
+        value={formik.values.description}
       />
 
       <div className="mt-3">
@@ -46,10 +43,12 @@ export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
           </div>
           <input
             type="number"
-            name="amount"
+            name="price"
             id="price"
             className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
             placeholder="0.00"
+            onChange={formik.handleChange}
+            value={formik.values.price}
           />
           <div className="absolute inset-y-0 right-0 flex items-center">
             <label htmlFor="currency" className="sr-only">
@@ -81,6 +80,9 @@ export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
             name="notes"
             id="notes"
             className="shadow-sm resize-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+            placeholder="Notes"
+            onChange={formik.handleChange}
+            value={formik.values.notes}
           />
         </div>
       </div>
@@ -93,7 +95,7 @@ export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
           Save and Add Item
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
