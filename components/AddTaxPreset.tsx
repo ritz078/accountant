@@ -26,7 +26,7 @@ export const AddTaxPreset: FC<{
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="mt-6 relative flex-1 px-4 sm:px-6">
+      <div className="relative mt-6 flex-1 px-4 sm:px-6">
         <Input
           required
           name="name"
@@ -38,7 +38,7 @@ export const AddTaxPreset: FC<{
           value={formik.values.name}
         />
 
-        <div className="flex flex-row justify-between gap-5 mt-3">
+        <div className="mt-3 flex flex-row justify-between gap-5">
           <Input
             required
             type="number"
@@ -63,7 +63,7 @@ export const AddTaxPreset: FC<{
               value={formik.values.type}
               onChange={formik.handleChange}
               className={classNames(
-                "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-200 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md",
+                "mt-1 block w-full rounded-md border-gray-200 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm",
                 {
                   "text-red-500": formik.touched.type && formik.errors.type,
                 }
@@ -75,10 +75,10 @@ export const AddTaxPreset: FC<{
           </div>
         </div>
       </div>
-      <div className="flex-shrink-0 px-4 py-4 flex justify-end border-t">
+      <div className="flex flex-shrink-0 justify-end border-t px-4 py-4">
         <button
           type="button"
-          className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           onClick={onClose}
         >
           Cancel
@@ -87,9 +87,9 @@ export const AddTaxPreset: FC<{
           disabled={!formik.isValid}
           type="submit"
           className={classNames(
-            "ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+            "ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2",
             {
-              "opacity-50 cursor-not-allowed": !formik.isValid,
+              "cursor-not-allowed opacity-50": !formik.isValid,
             }
           )}
         >

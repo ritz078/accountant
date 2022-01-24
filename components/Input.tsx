@@ -28,7 +28,7 @@ export const Input: FC<IInputProps> = ({
 
       <div className="relative rounded-md">
         {prefix && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <span className="text-gray-500 sm:text-sm">{prefix}</span>
           </div>
         )}
@@ -37,7 +37,7 @@ export const Input: FC<IInputProps> = ({
           name={name}
           id={name}
           className={classNames(
-            "focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-200 rounded-md text-gray-900",
+            "block w-full rounded-md border-gray-200 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
             {
               "mt-1": label,
               "pl-7": prefix,

@@ -28,7 +28,7 @@ export const SlideOver: FC<ISlideOverProps> = ({
           >
             <Dialog.Overlay className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
-          <div className="fixed inset-y-0 right-0 pl-10 max-w-lg flex">
+          <div className="fixed inset-y-0 right-0 flex max-w-lg pl-10">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -48,7 +48,7 @@ export const SlideOver: FC<ISlideOverProps> = ({
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <div className="absolute top-0 left-0 -ml-8 pt-4 pr-2 flex sm:-ml-10 sm:pr-4">
+                  <div className="absolute top-0 left-0 -ml-8 flex pt-4 pr-2 sm:-ml-10 sm:pr-4">
                     <button
                       type="button"
                       className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
@@ -59,7 +59,7 @@ export const SlideOver: FC<ISlideOverProps> = ({
                     </button>
                   </div>
                 </Transition.Child>
-                <div className="h-full flex flex-col pt-6 bg-white shadow-xl overflow-y-scroll">
+                <div className="flex h-full flex-col overflow-y-scroll bg-white pt-6 shadow-xl">
                   <div className="px-4 sm:px-6">
                     <Dialog.Title className="text-lg font-medium text-gray-900">
                       {title}

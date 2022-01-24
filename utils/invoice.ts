@@ -1,5 +1,5 @@
-import { IInvoice, ITaxOrDiscount } from "../pages/create-invoice";
 import * as Yup from "yup";
+import { IInvoice, ITaxOrDiscount } from "@/types/invoice";
 
 function getTaxes(originalAmount: number, taxes: ITaxOrDiscount[]): number {
   return (

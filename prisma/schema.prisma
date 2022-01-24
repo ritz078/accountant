@@ -14,8 +14,8 @@ model User {
   id        Int      @id @default(autoincrement())
   name      String?
   email     String?  @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @map(name: "updated_at")
 
   @@map(name: "users")
 }
@@ -23,15 +23,15 @@ model User {
 model Account {
   id                 Int       @default(autoincrement()) @id
   compoundId         String    @unique @map(name: "compound_id")
-  userId             Int
-  providerType       String
-  providerId         String
-  providerAccountId  String
-  refreshToken       String?
-  accessToken        String?
-  accessTokenExpires DateTime?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @default(now())
+  userId             Int       @map(name: "user_id")
+  providerType       String    @map(name: "provider_type")
+  providerId         String    @map(name: "provider_id")
+  providerAccountId  String    @map(name: "provider_account_id")
+  refreshToken       String?   @map(name: "refresh_token")
+  accessToken        String?   @map(name: "access_token")
+  accessTokenExpires DateTime? @map(name: "access_token_expires")
+  createdAt          DateTime  @default(now()) @map(name: "created_at")
+  updatedAt          DateTime  @default(now()) @map(name: "updated_at")
 
   @@index([providerAccountId], name: "providerAccountId")
   @@index([providerId], name: "providerId")
@@ -42,12 +42,21 @@ model Account {
 
 model Session {
   id           Int      @default(autoincrement()) @id
-  userId       Int
+  userId       Int      @map(name: "user_id")
   expires      DateTime
-  sessionToken String   @unique
-  accessToken  String   @unique
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+  sessionToken String   @unique @map(name: "session_token")
+  accessToken  String   @unique @map(name: "access_token")
+  createdAt    DateTime @default(now()) @map(name: "created_at")
+  updatedAt    DateTime @default(now()) @map(name: "updated_at")
 
   @@map(name: "sessions")
+}
+
+model Currency {
+  id Int @default(autoincrement()) @id
+  name String @unique
+  code String @unique
+  symbol String @unique
+
+  @@map(name: "currencies")
 }

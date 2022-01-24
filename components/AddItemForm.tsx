@@ -37,15 +37,15 @@ export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
         >
           Amount
         </label>
-        <div className="mt-1 relative rounded-md shadow-sm">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <div className="relative mt-1 rounded-md shadow-sm">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <span className="text-gray-500 sm:text-sm">$</span>
           </div>
           <input
             type="number"
             name="price"
             id="price"
-            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
+            className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="0.00"
             onChange={formik.handleChange}
             value={formik.values.price}
@@ -57,7 +57,7 @@ export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
             <select
               id="currency"
               name="currency"
-              className="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md"
+              className="h-full rounded-md border-transparent bg-transparent py-0 pl-2 pr-7 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             >
               <option>USD</option>
               <option>CAD</option>
@@ -79,7 +79,7 @@ export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
             rows={4}
             name="notes"
             id="notes"
-            className="shadow-sm resize-none focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+            className="block w-full resize-none rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="Notes"
             onChange={formik.handleChange}
             value={formik.values.notes}
@@ -87,10 +87,10 @@ export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
         </div>
       </div>
 
-      <div className="mt-1 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+      <div className="mt-1 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
         <button
           type="button"
-          className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
+          className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
         >
           Save and Add Item
         </button>

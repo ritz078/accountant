@@ -54,10 +54,10 @@ export function Select<T extends IOption = IOption>({
             {label}{" "}
             {required && <span className="text-top text-red-500">*</span>}
           </Listbox.Label>
-          <div className="mt-1 relative">
+          <div className="relative mt-1">
             <Listbox.Button
               className={classNames(
-                "bg-white relative w-full border border-gray-200 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
+                "relative w-full cursor-default rounded-md border border-gray-200 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm",
                 buttonClassName,
                 {
                   "border-red-500": error,
@@ -67,7 +67,7 @@ export function Select<T extends IOption = IOption>({
               <span className="block truncate">
                 {onRenderLabel?.(value) || value?.name || placeholder}
               </span>
-              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <SelectorIcon
                   className="h-5 w-5 text-gray-400"
                   aria-hidden="true"
@@ -81,14 +81,14 @@ export function Select<T extends IOption = IOption>({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+              <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {options.map((option) => (
                   <Listbox.Option
                     key={option.id}
                     className={({ active }) =>
                       classNames(
-                        active ? "text-white bg-indigo-600" : "text-gray-900",
-                        "cursor-default select-none relative py-2 pl-3 pr-9"
+                        active ? "bg-indigo-600 text-white" : "text-gray-900",
+                        "relative cursor-default select-none py-2 pl-3 pr-9"
                       )
                     }
                     value={option}
@@ -109,7 +109,7 @@ export function Select<T extends IOption = IOption>({
 
 export interface IOption {
   name: string;
-  id: string;
+  id: number;
 }
 
 interface ISelectProps<T> {

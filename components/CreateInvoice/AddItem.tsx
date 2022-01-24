@@ -16,7 +16,7 @@ export const AddItem: FC<IAddItemProps> = ({
       <div>
         <Menu.Button>
           {button || (
-            <div className="bg-indigo-100 inline-flex items-center shadow-sm px-4 py-1.5 border border-indigo-300 hover:bg-indigo-200 text-sm leading-5 font-medium rounded-full text-indigo-600 focus:outline-none">
+            <div className="inline-flex items-center rounded-full border border-indigo-300 bg-indigo-100 px-4 py-1.5 text-sm font-medium leading-5 text-indigo-600 shadow-sm hover:bg-indigo-200 focus:outline-none">
               <PlusSmIcon
                 className={"-ml-1.5 mr-1 h-5 w-5 text-indigo-600"}
                 aria-hidden="true"
@@ -36,7 +36,7 @@ export const AddItem: FC<IAddItemProps> = ({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-left absolute left-0 z-10 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none max-h-72 overflow-y-auto">
+        <Menu.Items className="absolute left-0 z-10 mt-2 max-h-72 w-80 origin-top-left overflow-y-auto rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             {items.map((item, index) => (
               <Menu.Item
@@ -44,10 +44,10 @@ export const AddItem: FC<IAddItemProps> = ({
                 key={item.id}
                 onClick={() => onSelect(item)}
               >
-                <div className="px-4 py-2 hover:bg-gray-50 cursor-pointer">
+                <div className="cursor-pointer px-4 py-2 hover:bg-gray-50">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium truncate">{item.name}</p>
-                    <div className="ml-2 flex-shrink-0 flex">
+                    <p className="truncate text-sm font-medium">{item.name}</p>
+                    <div className="ml-2 flex flex-shrink-0">
                       <p className="text-sm text-gray-400">
                         $ {formatNumber(item.price)}
                       </p>
@@ -57,16 +57,16 @@ export const AddItem: FC<IAddItemProps> = ({
               </Menu.Item>
             ))}
 
-            <div className="pt-1 border-t mt-1 border-gray-100">
+            <div className="mt-1 border-t border-gray-100 pt-1">
               <Menu.Item onClick={onCreate}>
                 {({ active }) => (
                   <div
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                      "block px-4 py-2 flex flex-row cursor-pointer items-center text-sm font-medium !text-indigo-600"
+                      "block flex cursor-pointer flex-row items-center px-4 py-2 text-sm font-medium !text-indigo-600"
                     )}
                   >
-                    <PlusIcon className="w-4 h-4 mr-2" /> Create new Item
+                    <PlusIcon className="mr-2 h-4 w-4" /> Create new Item
                   </div>
                 )}
               </Menu.Item>

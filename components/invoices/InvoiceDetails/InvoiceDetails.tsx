@@ -4,6 +4,10 @@ import classNames from "classnames";
 import { formatNumber } from "@/utils/number";
 import { CheckIcon, ThumbUpIcon, UserIcon } from "@heroicons/react/outline";
 import { IInvoice } from "@/types/invoice";
+import useSWR from "swr";
+import { IMeta } from "@/types/api/meta";
+import { fetcher } from "@/utils/fetcher";
+import { customers } from "@/utils/fakeData";
 
 const timeline = [
   {
@@ -49,18 +53,26 @@ const timeline = [
 ];
 
 export const InvoiceDetails: FC<IInvoice> = ({
-  customer,
-  currency,
+  customerId,
+  currencyCode,
   issueDate,
   total,
   notes,
   invoiceNumber,
   status,
 }) => {
+  const { data: metaData } = useSWR<IMeta>("/api/meta", fetcher);
+
+  const currency = metaData?.currencies.find(
+    (currency) => currency.code === currencyCode
+  );
+
+  const customer = customers.find((customer) => customer.id === customerId);
+
   return (
-    <div className="bg-white ml-5 shadow overflow-hidden sm:rounded-lg flex flex-1 flex-col h-fit sticky top-5">
+    <div className="ml-5 flex h-fit flex-1 flex-col overflow-hidden bg-white shadow sm:rounded-lg">
       <div className="px-4 py-5 sm:px-6">
-        <h3 className="text-lg leading-6 font-medium text-gray-900 flex items-center">
+        <h3 className="flex items-center text-lg font-medium leading-6 text-gray-900">
           Invoice #{invoiceNumber}
         </h3>
         <p className="mr-1 max-w-2xl text-sm text-gray-500">
@@ -71,22 +83,22 @@ export const InvoiceDetails: FC<IInvoice> = ({
         <dl>
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-3 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Customer</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
               {customer?.name}
             </dd>
           </div>
           <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-3 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Issue Date</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
               {format(issueDate, "MMMM dd, yyyy")}
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-3 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Email</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
               <a
                 href={`mailto:${customer?.email}`}
-                className="text-blue-800 hover:underline text-ellipsis overflow-hidden"
+                className="overflow-hidden text-ellipsis text-blue-800 hover:underline"
               >
                 {customer?.email}
               </a>
@@ -94,11 +106,11 @@ export const InvoiceDetails: FC<IInvoice> = ({
           </div>
           <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-3 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Amount</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {currency.symbol} {formatNumber(total)}
+            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              {currency?.symbol} {formatNumber(total)}
               <span
                 className={classNames(
-                  "ml-2 capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800",
+                  "ml-2 inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium capitalize text-indigo-800",
                   {
                     "bg-yellow-100 text-yellow-700": status === "sent",
                     "bg-green-100 text-green-700": status === "paid",
@@ -110,8 +122,8 @@ export const InvoiceDetails: FC<IInvoice> = ({
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-5 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500 mb-2">Note</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <dt className="mb-2 text-sm font-medium text-gray-500">Note</dt>
+            <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
               {notes}
             </dd>
           </div>
@@ -134,7 +146,7 @@ export const InvoiceDetails: FC<IInvoice> = ({
                     <span
                       className={classNames(
                         event.iconBackground,
-                        "h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
+                        "flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white"
                       )}
                     >
                       <event.icon
@@ -143,7 +155,7 @@ export const InvoiceDetails: FC<IInvoice> = ({
                       />
                     </span>
                   </div>
-                  <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                  <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                     <div>
                       <p className="text-sm text-gray-500">
                         {event.content}{" "}
@@ -155,7 +167,7 @@ export const InvoiceDetails: FC<IInvoice> = ({
                         </a>
                       </p>
                     </div>
-                    <div className="text-right text-sm whitespace-nowrap text-gray-500">
+                    <div className="whitespace-nowrap text-right text-sm text-gray-500">
                       <time dateTime={event.datetime}>{event.date}</time>
                     </div>
                   </div>

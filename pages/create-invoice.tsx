@@ -8,7 +8,6 @@ import { AddItemForm } from "@/components/AddItemForm";
 import { useFormik } from "formik";
 import { addDays, format } from "date-fns";
 import { CurrencySelect } from "@/components/Select/CurrencySelect";
-import { currencies } from "@/utils/currency";
 import { AddTaxOrDiscount } from "@/components/CreateInvoice/AddTaxOrDiscount";
 import { getAmount, getTotalInvoiceAmount, schema } from "@/utils/invoice";
 import classNames from "classnames";
@@ -16,12 +15,16 @@ import { customers, items, taxPresets } from "@/utils/fakeData";
 import { formatNumber } from "@/utils/number";
 import { IInvoice } from "@/types/invoice";
 import { SlideOver } from "@/components/SlideOver";
+import useSWR from "swr";
+import { fetcher } from "@/utils/fetcher";
+import { IMeta } from "@/types/api/meta";
 
 const CreateInvoice: NextPage<{
   setShowAddTaxForm: (show: boolean) => void;
   setShowAddCustomerForm: (show: boolean) => void;
 }> = ({ setShowAddTaxForm, setShowAddCustomerForm }) => {
   const [showAddItemModal, setShowAddItemModal] = useState(false);
+  const { data: metaData } = useSWR<IMeta>("/api/meta", fetcher);
 
   const formik = useFormik<IInvoice>({
     initialValues: {
@@ -30,10 +33,10 @@ const CreateInvoice: NextPage<{
       issueDate: new Date(),
       dueDate: new Date(addDays(new Date(), 14)),
       notes: "",
-      customer: null,
+      customerId: null,
       items: [],
       taxes: [],
-      currency: currencies.find((c) => c.id === "INR")!,
+      currency: "INR",
     } as never,
     onSubmit: (values) => {
       console.log(values);
@@ -44,28 +47,34 @@ const CreateInvoice: NextPage<{
   const { values, setFieldValue, handleChange, errors, handleSubmit, touched } =
     formik;
 
-  const currencySymbol = formik.values.currency.symbol;
+  if (!metaData) return null;
+
+  const currency = metaData.currencies.find(
+    (c) => c.code === values.currencyCode
+  );
+
+  const currencySymbol = currency?.symbol;
 
   return (
     <div className="flex flex-1 gap-4">
       <div className="w-8/12 shrink-0 grow-0">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
+        <h3 className="text-lg font-medium leading-6 text-gray-900">
           Create Invoice
         </h3>
-        <div className="mt-5 bg-white overflow-hidden shadow rounded-lg h-fit flex-col shrink-0">
+        <div className="mt-5 h-fit shrink-0 flex-col overflow-hidden rounded-lg bg-white shadow">
           <div className="flex flex-1 flex-col overflow-x-hidden">
-            <div className="my-6 relative px-4 sm:px-6">
+            <div className="relative my-6 px-4 sm:px-6">
               <div className="flex flex-row justify-between gap-28">
-                <div className="w-1/2 h-fit flex flex-row gap-2">
+                <div className="flex h-fit w-1/2 flex-row gap-2">
                   <div className="flex flex-1 flex-col">
                     <Select
-                      error={!!(touched.customer && errors.customer)}
+                      error={!!(touched.customerId && errors.customerId)}
                       label="Customer"
                       required
                       onChange={(selected) =>
-                        setFieldValue("customer", selected)
+                        setFieldValue("customerId", selected)
                       }
-                      value={values.customer}
+                      value={customers.find((c) => c.id === values.customerId)}
                       options={customers}
                       placeholder="Select your customer"
                       buttonClassName="shadow-none"
@@ -75,20 +84,20 @@ const CreateInvoice: NextPage<{
                   <button
                     onClick={() => setShowAddCustomerForm(true)}
                     type="button"
-                    className="inline-flex self-end h-fit items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="inline-flex h-fit items-center self-end rounded-full border border-transparent bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
                     <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                 </div>
 
-                <div className="flex flex-col gap-2 flex-1">
+                <div className="flex flex-1 flex-col gap-2">
                   <Input
                     error={!!(touched.invoiceNumber && errors.invoiceNumber)}
                     required
                     label="Invoice No"
                     name="invoiceNumber"
                     type="text"
-                    className="flex flex-col flex-1"
+                    className="flex flex-1 flex-col"
                     onChange={handleChange}
                     value={values.invoiceNumber}
                   />
@@ -98,7 +107,7 @@ const CreateInvoice: NextPage<{
                     label="Issued on"
                     name="issueDate"
                     type="date"
-                    className="flex flex-col flex-1"
+                    className="flex flex-1 flex-col"
                     onChange={(e) =>
                       setFieldValue("issueDate", new Date(e.target.value))
                     }
@@ -110,7 +119,7 @@ const CreateInvoice: NextPage<{
                     label="Due on"
                     name="dueDate"
                     type="date"
-                    className="flex flex-col flex-1"
+                    className="flex flex-1 flex-col"
                     onChange={(e) =>
                       setFieldValue("dueDate", new Date(e.target.value))
                     }
@@ -119,40 +128,40 @@ const CreateInvoice: NextPage<{
                 </div>
               </div>
 
-              <div className="flex flex-col pt-6 w-full mt-4">
+              <div className="mt-4 flex w-full flex-col pt-6">
                 <div className="-my-2 sm:-mx-6 lg:-mx-8 ">
-                  <div className="pt-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                  <div className="inline-block min-w-full pt-2 align-middle sm:px-6 lg:px-8">
                     <div className="rounded-sm border-b border-gray-100">
                       <table className="min-w-full divide-y divide-gray-200">
                         <thead>
-                          <tr className="bg-[#f9f9f9] border border-gray-100">
+                          <tr className="border border-gray-100 bg-[#f9f9f9]">
                             <th
                               scope="col"
-                              className="p-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                              className="p-2 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                             >
                               Items
                             </th>
                             <th
                               scope="col"
-                              className="p-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                              className="p-2 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                             >
                               Qty
                             </th>
                             <th
                               scope="col"
-                              className="p-2 pr-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                              className="p-2 pr-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                             >
                               Price
                             </th>
                             <th
                               scope="col"
-                              className="p-2 text-right pr-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                              className="p-2 pr-3 text-left text-right text-xs font-medium uppercase tracking-wider text-gray-500"
                             >
                               Amount
                             </th>
                           </tr>
                         </thead>
-                        <tbody className="align-top !border-gray-100">
+                        <tbody className="!border-gray-100 align-top">
                           {values.items.map((item, itemIndex) => {
                             const {
                               price,
@@ -169,30 +178,30 @@ const CreateInvoice: NextPage<{
                                     "relative border-t border-gray-100 bg-white"
                                   }
                                 >
-                                  <td className="pl-0 py-3 whitespace-nowrap text-sm">
+                                  <td className="whitespace-nowrap py-3 pl-0 text-sm">
                                     <div className="isolate -space-y-px rounded-md shadow-sm">
-                                      <div className="relative border border-gray-200 rounded-md rounded-b-none focus-within:z-10 focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600">
+                                      <div className="relative rounded-md rounded-b-none border border-gray-200 focus-within:z-10 focus-within:border-indigo-600 focus-within:ring-1 focus-within:ring-indigo-600">
                                         <input
                                           name={`items[${itemIndex}].name`}
                                           onChange={handleChange}
                                           value={name}
-                                          className="outline-none relative block w-full px-3 py-2 rounded-none rounded-t-md bg-transparent focus:z-10 sm:text-sm border-gray-300"
+                                          className="relative block w-full rounded-none rounded-t-md border-gray-300 bg-transparent px-3 py-2 outline-none focus:z-10 sm:text-sm"
                                           placeholder="Name"
                                         />
                                       </div>
-                                      <div className="relative border border-gray-200 rounded-md rounded-t-none focus-within:z-10 focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600">
+                                      <div className="relative rounded-md rounded-t-none border border-gray-200 focus-within:z-10 focus-within:border-indigo-600 focus-within:ring-1 focus-within:ring-indigo-600">
                                         <input
                                           value={description}
                                           onChange={handleChange}
                                           name={`items[${itemIndex}].description`}
-                                          className="outline-none relative block w-full rounded-none rounded-b-md px-3 py-2 bg-transparent focus:z-10 sm:text-sm border-gray-300"
+                                          className="relative block w-full rounded-none rounded-b-md border-gray-300 bg-transparent px-3 py-2 outline-none focus:z-10 sm:text-sm"
                                           placeholder="Description"
                                         />
                                       </div>
                                     </div>
 
                                     <AddTaxOrDiscount
-                                      currencySymbol={values.currency.symbol}
+                                      currencySymbol={currencySymbol}
                                       items={taxPresets}
                                       applied={taxes}
                                       onCreate={() => {}}
@@ -220,7 +229,7 @@ const CreateInvoice: NextPage<{
                                       }}
                                     />
                                   </td>
-                                  <td className="w-24 p-2 py-3 whitespace-nowrap text-sm text-gray-500">
+                                  <td className="w-24 whitespace-nowrap p-2 py-3 text-sm text-gray-500">
                                     <Input
                                       min={0}
                                       type="number"
@@ -229,17 +238,17 @@ const CreateInvoice: NextPage<{
                                       value={quantity}
                                     />
                                   </td>
-                                  <td className="p-2 w-36 py-3 whitespace-nowrap text-sm text-gray-500">
+                                  <td className="w-36 whitespace-nowrap p-2 py-3 text-sm text-gray-500">
                                     <Input
                                       min={0}
                                       type="number"
                                       name={`items[${itemIndex}].price`}
-                                      prefix={values.currency.symbol}
+                                      prefix={currencySymbol}
                                       onChange={handleChange}
                                       value={price}
                                     />
                                   </td>
-                                  <td className="p-2 text-sm py-3 text-gray-500 text-right">
+                                  <td className="p-2 py-3 text-right text-sm text-gray-500">
                                     <div className="pt-2">
                                       {currencySymbol}{" "}
                                       {formatNumber(
@@ -248,7 +257,7 @@ const CreateInvoice: NextPage<{
                                     </div>
 
                                     <TrashIcon
-                                      className="w-5 h-5 absolute right-0 bottom-5 text-red-500 hover:text-red-600 cursor-pointer"
+                                      className="absolute right-0 bottom-5 h-5 w-5 cursor-pointer text-red-500 hover:text-red-600"
                                       onClick={() => {
                                         setFieldValue(
                                           "items",
@@ -273,7 +282,7 @@ const CreateInvoice: NextPage<{
               {!values.items.length && (
                 <div
                   className={classNames(
-                    "relative flex flex-col items-center block w-full border-2 border-gray-200 border-dashed rounded-lg p-10 text-center focus:outline-none mt-8",
+                    "relative mt-8 block flex w-full flex-col items-center rounded-lg border-2 border-dashed border-gray-200 p-10 text-center focus:outline-none",
                     {
                       "border-red-500": !!(
                         touched.items && errors.items?.length
@@ -291,7 +300,7 @@ const CreateInvoice: NextPage<{
                 </div>
               )}
 
-              <div className="flex flex-row h-fit justify-between mt-4">
+              <div className="mt-4 flex h-fit flex-row justify-between">
                 {!!values.items.length ? (
                   <AddItem
                     items={items}
@@ -309,8 +318,8 @@ const CreateInvoice: NextPage<{
                   <div />
                 )}
 
-                <div className="flex flex-col w-1/3">
-                  <div className="py-1 text-sm flex items-center justify-between">
+                <div className="flex w-1/3 flex-col">
+                  <div className="flex items-center justify-between py-1 text-sm">
                     <span className="font-medium">Subtotal</span>
                     <span className="text-base font-medium text-gray-700">
                       {currencySymbol}{" "}
@@ -321,7 +330,7 @@ const CreateInvoice: NextPage<{
                   {values.taxes.map((tax) => (
                     <div
                       key={tax.id}
-                      className="py-1 text-sm flex items-center text-gray-600 justify-between"
+                      className="flex items-center justify-between py-1 text-sm text-gray-600"
                     >
                       <span>{tax.name}</span>
                       <span>
@@ -334,12 +343,12 @@ const CreateInvoice: NextPage<{
 
                   <AddTaxOrDiscount
                     button={
-                      <div className="py-1 pb-2 block text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:underline">
+                      <div className="block py-1 pb-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:underline">
                         Add Tax
                       </div>
                     }
                     dropdownClassName="!right-0 !left-auto"
-                    currencySymbol={values.currency.symbol}
+                    currencySymbol={currencySymbol}
                     items={taxPresets}
                     applied={values.taxes}
                     onCreate={() => setShowAddTaxForm(true)}
@@ -355,7 +364,7 @@ const CreateInvoice: NextPage<{
                     }}
                   />
 
-                  <div className="py-1 text-sm flex justify-between border-t border-gray-200">
+                  <div className="flex justify-between border-t border-gray-200 py-1 text-sm">
                     <span className="font-medium">Total Payable</span>
                     <span className="text-base font-medium text-gray-700">
                       {currencySymbol}{" "}
@@ -377,7 +386,7 @@ const CreateInvoice: NextPage<{
                     rows={6}
                     name="notes"
                     id="notes"
-                    className="resize-none shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-200 rounded-md"
+                    className="block w-full resize-none rounded-md border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     onChange={handleChange}
                     value={values.notes}
                   />
@@ -396,27 +405,29 @@ const CreateInvoice: NextPage<{
         </div>
       </div>
 
-      <div className="flex flex-col h-fit w-3/12 mt-11 sticky top-4">
-        <div className="flex flex-row gap-4 w-full">
+      <div className="sticky top-4 mt-11 flex h-fit w-3/12 flex-col">
+        <div className="flex w-full flex-row gap-4">
           <button
             type="submit"
-            className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow text-sm font-medium rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="inline-flex w-full justify-center rounded-md border border-transparent bg-white py-2 px-4 text-sm font-medium text-gray-900 shadow focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
             Preview
           </button>
           <button
             type="submit"
             onClick={() => handleSubmit()}
-            className="w-full bg-indigo-500 inline-flex justify-center py-2 px-4 border border-transparent shadow text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-500 py-2 px-4 text-sm font-medium text-white shadow focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
             Save
           </button>
         </div>
 
-        <div className="bg-gradient-tr bg-white bg-opacity-80 my-4 shadow p-4 rounded-md">
+        <div className="bg-gradient-tr my-4 rounded-md bg-white bg-opacity-80 p-4 shadow">
           <CurrencySelect
-            value={values.currency}
-            onChange={(currency) => setFieldValue("currency", currency)}
+            value={values.currencyCode}
+            onChange={(currency) =>
+              setFieldValue("currencyCode", currency.code)
+            }
           />
         </div>
       </div>

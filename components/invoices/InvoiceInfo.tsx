@@ -10,6 +10,10 @@ import { AlertModal } from "../AlertModal";
 import { format } from "date-fns";
 import { formatNumber } from "@/utils/number";
 import { IInvoice } from "@/types/invoice";
+import { customers } from "@/utils/fakeData";
+import useSWR from "swr";
+import { fetcher } from "@/utils/fetcher";
+import { IMeta } from "@/types/api/meta";
 
 export const InvoiceInfo = ({
   position,
@@ -19,9 +23,20 @@ export const InvoiceInfo = ({
   position: number;
   onClick: (invoice: IInvoice) => void;
 }) => {
-  const { id, total, customer, currency, invoiceNumber, issueDate, status } =
-    invoice;
+  const { data: metaData } = useSWR<IMeta>("/api/meta", fetcher);
+  const {
+    id,
+    total,
+    customerId,
+    currencyCode,
+    invoiceNumber,
+    issueDate,
+    status,
+  } = invoice;
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+  const customer = customers.find((c) => c.id === customerId);
+  const currency = metaData?.currencies.find((c) => c.id === currencyCode);
 
   return (
     <>
@@ -33,10 +48,10 @@ export const InvoiceInfo = ({
           "cursor-pointer"
         )}
       >
-        <td className="pl-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        <td className="whitespace-nowrap py-4 pl-6 text-sm font-medium text-gray-900">
           <span
             className={classNames(
-              "capitalize inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800",
+              "inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium capitalize text-indigo-800",
               {
                 "bg-yellow-100 text-yellow-600": status === "sent",
                 "bg-green-100 text-green-700": status === "paid",
@@ -46,25 +61,25 @@ export const InvoiceInfo = ({
             {status}
           </span>
         </td>
-        <td className="pl-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        <td className="whitespace-nowrap py-4 pl-6 text-sm font-medium text-gray-900">
           {format(issueDate, "yyyy-MM-dd")}
         </td>
-        <td className="pl-6 py-4 whitespace-nowrap text-sm text-gray-500">
+        <td className="whitespace-nowrap py-4 pl-6 text-sm text-gray-500">
           {invoiceNumber}
         </td>
-        <td className="pl-6 py-4 whitespace-nowrap text-sm text-gray-500">
+        <td className="whitespace-nowrap py-4 pl-6 text-sm text-gray-500">
           {customer?.name}
         </td>
-        <td className="pl-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          <span className="inline-block min-w-5 mr-1 text-gray-400">
-            {currency.symbol}
+        <td className="whitespace-nowrap py-4 pl-6 text-sm text-gray-500">
+          <span className="min-w-5 mr-1 inline-block text-gray-400">
+            {currency?.symbol}
           </span>
           {formatNumber(total)}
         </td>
-        <td className="px-6 py-2.5 whitespace-nowrap text-right text-sm font-medium">
+        <td className="whitespace-nowrap px-6 py-2.5 text-right text-sm font-medium">
           <Menu as="div" className="relative inline-block text-left">
             <div>
-              <Menu.Button className="bg-gray-100 p-1 rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+              <Menu.Button className="flex items-center rounded-full bg-gray-100 p-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
                 <span className="sr-only">Open options</span>
                 <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
               </Menu.Button>
@@ -79,7 +94,7 @@ export const InvoiceInfo = ({
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="origin-top-right  z-10 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className="absolute  right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
                   <Menu.Item>
                     {({ active }) => (

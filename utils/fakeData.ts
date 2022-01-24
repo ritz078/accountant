@@ -1,5 +1,7 @@
 import faker from "@faker-js/faker";
-import { IInvoice, IItem, ITaxOrDiscount } from "../pages/create-invoice";
+import { ICustomer } from "@/types/customer";
+import { IInvoice, ITaxOrDiscount } from "@/types/invoice";
+import { IItem } from "@/types/api/item";
 
 export const invoices: IInvoice[] = new Array(15).fill(null).map(() => ({
   id: faker.datatype.uuid(),
@@ -7,23 +9,9 @@ export const invoices: IInvoice[] = new Array(15).fill(null).map(() => ({
   issueDate: faker.date.past(),
   dueDate: faker.date.future(),
   createdAt: faker.date.past(),
-  customer: {
-    id: faker.datatype.uuid(),
-    name: faker.name.findName(),
-    address: faker.address.streetAddress(),
-    city: faker.address.city(),
-    state: faker.address.state(),
-    zip: faker.address.zipCode(),
-    country: faker.address.country(),
-    phone: faker.phone.phoneNumber(),
-    email: faker.internet.email(),
-  },
+  customerId: faker.datatype.number(100),
   notes: faker.lorem.paragraph(),
-  currency: {
-    id: faker.datatype.uuid(),
-    name: faker.finance.currencyCode(),
-    symbol: "$",
-  },
+  currencyCode: faker.finance.currencyCode(),
   taxes: new Array(2).fill(null).map(() => ({
     id: faker.datatype.uuid(),
     name: faker.commerce.productName(),
@@ -39,11 +27,7 @@ export const invoices: IInvoice[] = new Array(15).fill(null).map(() => ({
     quantity: faker.datatype.number(5),
     price: faker.datatype.number(10000),
     name: faker.commerce.productName(),
-    currency: {
-      id: faker.datatype.uuid(),
-      name: faker.finance.currencyCode(),
-      symbol: faker.finance.currencySymbol(),
-    },
+    currencyCode: faker.finance.currencyCode(),
     taxes: new Array(2).fill(null).map(() => ({
       id: faker.datatype.uuid(),
       name: faker.commerce.productName(),
@@ -72,16 +56,23 @@ export const items: IItem[] = new Array(5).fill(null).map(() => ({
   })),
 }));
 
-export const customers = new Array(5).fill(null).map(() => ({
+export const customers: ICustomer[] = new Array(5).fill(null).map(() => ({
   id: faker.datatype.uuid(),
   name: faker.name.findName(),
-  address: faker.address.streetAddress(),
-  city: faker.address.city(),
-  state: faker.address.state(),
-  zip: faker.address.zipCode(),
-  country: faker.address.country(),
+  address: {
+    city: faker.address.city(),
+    state: faker.address.state(),
+    pin: faker.address.zipCode(),
+    country: faker.address.country(),
+    line1: faker.address.streetAddress(),
+    line2: faker.address.streetAddress(),
+  },
   phone: faker.phone.phoneNumber(),
   email: faker.internet.email(),
+  vatin: faker.finance.iban(),
+  gstin: faker.finance.iban(),
+  currency: faker.finance.currencyCode(),
+  notes: faker.lorem.paragraph(),
 }));
 
 export const taxPresets: ITaxOrDiscount[] = new Array(3).fill(null).map(() => ({

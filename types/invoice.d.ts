@@ -1,21 +1,4 @@
-import { ICurrency } from "@/types/currency";
-
-interface ICustomer {
-  id: string;
-  name: string;
-  email?: string;
-}
-
-export interface IItem {
-  id: string;
-  name: string;
-  description?: string;
-  price: number;
-  currency?: ICurrency;
-  quantity: number;
-  taxes: ITaxOrDiscount[];
-  notes?: string;
-}
+import { IItem } from "@/types/api/item";
 
 export interface ITaxOrDiscount {
   id: string;
@@ -30,11 +13,11 @@ export interface IInvoice {
   invoiceNumber: string | number;
   issueDate: Date;
   dueDate: Date;
-  customer: ICustomer | null;
+  customerId: number;
   notes: string;
   items: IItem[];
   taxes: ITaxOrDiscount[];
-  currency: ICurrency;
+  currencyCode: string;
   total: number;
   status: "draft" | "sent" | "paid";
 }
