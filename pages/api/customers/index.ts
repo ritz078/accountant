@@ -1,15 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
-import { ICustomer, ICustomerNew } from "@/types/customer";
-
-const prisma = new PrismaClient();
+import { Address, Customer } from "@prisma/client";
+import { prisma } from "@/utils/prisma";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ICustomer | Omit<ICustomer, "address">[]>
+  res: NextApiResponse<Customer & {
+    address: Address
+  } | Customer[]>
 ) {
   if (req.method === "POST") {
-    const { address, ...customer } = req.body as ICustomerNew;
+    const { address, ...customer } = req.body;
 
     const customerSaved = await prisma.customer.create({
       data: {

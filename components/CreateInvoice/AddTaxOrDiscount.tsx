@@ -2,10 +2,10 @@ import { Menu, Transition } from "@headlessui/react";
 import { CheckIcon, PlusIcon } from "@heroicons/react/outline";
 import React, { Fragment } from "react";
 import classNames from "classnames";
-import { ITaxOrDiscount } from "@/types/invoice";
+import {Tax} from "@prisma/client"
 
 function getTaxLabel(
-  tax: ITaxOrDiscount,
+  tax: Tax,
   currencySymbol?: string,
   formatValue = true
 ) {
@@ -106,11 +106,11 @@ export function AddTaxOrDiscount({
 }
 
 interface IAddTaxOrDiscountProps {
-  items: ITaxOrDiscount[];
+  items: Tax[];
   onCreate: () => void;
-  onToggle: (item: ITaxOrDiscount) => void;
+  onToggle: (item: Tax) => void;
   currencySymbol?: string;
-  applied: ITaxOrDiscount[];
+  applied: Tax[];
   button?: JSX.Element;
   dropdownClassName?: string;
 }

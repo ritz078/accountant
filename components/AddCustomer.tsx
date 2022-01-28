@@ -3,14 +3,14 @@ import React, { FC } from "react";
 import classNames from "classnames";
 import { CurrencySelect } from "./Select/CurrencySelect";
 import { useFormik } from "formik";
-import { ICustomerNew } from "@/types/customer";
+import { CustomerDraft } from "@/types/customer";
 import { customerInitialValue, customerSchema } from "@/utils/forms/customer";
 import { createCustomer } from "@/data/customer";
 
 export const AddCustomer: FC<{
   onClose: () => void;
 }> = ({ onClose }) => {
-  const formik = useFormik<ICustomerNew>({
+  const formik = useFormik<CustomerDraft>({
     initialValues: customerInitialValue,
     onSubmit: async (values) => {
       await createCustomer(values);

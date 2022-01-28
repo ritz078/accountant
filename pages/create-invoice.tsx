@@ -194,7 +194,7 @@ const CreateInvoice: NextPage<{
                                       </div>
                                       <div className="relative rounded-md rounded-t-none border border-gray-200 focus-within:z-10 focus-within:border-indigo-600 focus-within:ring-1 focus-within:ring-indigo-600">
                                         <input
-                                          value={description}
+                                          value={description || undefined}
                                           onChange={handleChange}
                                           name={`items[${itemIndex}].description`}
                                           className="relative block w-full rounded-none rounded-b-md border-gray-300 bg-transparent px-3 py-2 outline-none focus:z-10 sm:text-sm"
@@ -391,7 +391,7 @@ const CreateInvoice: NextPage<{
                     id="notes"
                     className="block w-full resize-none rounded-md border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     onChange={handleChange}
-                    value={values.notes}
+                    value={values.notes || undefined}
                   />
                 </div>
               </div>

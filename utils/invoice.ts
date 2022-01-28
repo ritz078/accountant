@@ -1,7 +1,8 @@
 import * as Yup from "yup";
-import { IInvoice, ITaxOrDiscount } from "@/types/invoice";
+import { IInvoice } from "@/types/invoice";
+import { Tax } from "@prisma/client";
 
-function getTaxes(originalAmount: number, taxes: ITaxOrDiscount[]): number {
+function getTaxes(originalAmount: number, taxes: Tax[]): number {
   return (
     taxes?.reduce((prev, curr) => {
       if (curr.type === "percentage") {
@@ -13,7 +14,7 @@ function getTaxes(originalAmount: number, taxes: ITaxOrDiscount[]): number {
   );
 }
 
-export function getAmount(originalAmount: number, taxes: ITaxOrDiscount[]) {
+export function getAmount(originalAmount: number, taxes: Tax[]) {
   return originalAmount + getTaxes(originalAmount, taxes);
 }
 

@@ -1,7 +1,7 @@
 import { onRenderOptionDefault, Select } from "./Select";
 import { FC } from "react";
-import { ICurrency } from "@/types/currency";
 import { useMeta } from "@/data/useMeta";
+import { Currency } from "@prisma/client";
 
 export const CurrencySelect: FC<ICurrencySelect> = ({
   onChange,
@@ -14,7 +14,7 @@ export const CurrencySelect: FC<ICurrencySelect> = ({
   const selected = data.currencies.find((c) => c.code === value);
 
   return (
-    <Select<ICurrency>
+    <Select<Currency>
       required={!!label}
       label={label}
       placeholder={`Select currency`}
@@ -44,7 +44,7 @@ export const CurrencySelect: FC<ICurrencySelect> = ({
 };
 
 interface ICurrencySelect {
-  onChange: (value: ICurrency) => void;
+  onChange: (value: Currency) => void;
   value: string;
   label?: string;
 }

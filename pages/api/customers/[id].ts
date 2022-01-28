@@ -1,13 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
-import { ICustomer } from "@/types/customer";
-
-const prisma = new PrismaClient();
+import { Customer } from "@prisma/client";
+import { prisma } from "@/utils/prisma";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<
-    | ICustomer
+    | Customer
     | {
         message: string;
       }

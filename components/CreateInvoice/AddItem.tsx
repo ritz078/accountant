@@ -3,7 +3,7 @@ import { PlusIcon, PlusSmIcon } from "@heroicons/react/outline";
 import React, { FC, Fragment } from "react";
 import classNames from "classnames";
 import { formatNumber } from "@/utils/number";
-import { IItem } from "@/types/api/item";
+import { InvoiceItem } from "@prisma/client";
 
 export const AddItem: FC<IAddItemProps> = ({
   items,
@@ -79,8 +79,8 @@ export const AddItem: FC<IAddItemProps> = ({
 };
 
 interface IAddItemProps {
-  items: IItem[];
+  items: InvoiceItem[];
   onCreate: () => void;
-  onSelect: (item: IItem) => void;
+  onSelect: (item: InvoiceItem) => void;
   button?: JSX.Element;
 }

@@ -57,7 +57,7 @@ export const InvoiceInfo = ({
             className={classNames(
               "inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium capitalize text-indigo-800",
               {
-                "bg-yellow-100 text-yellow-600": status === "sent",
+                "bg-yellow-100 text-yellow-600": status === "issued",
                 "bg-green-100 text-green-700": status === "paid",
               }
             )}

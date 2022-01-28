@@ -1,9 +1,9 @@
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
-import { ITaxOrDiscount } from "@/types/invoice";
+import { Tax } from "@prisma/client";
 
 export function useTaxes() {
-  const { data, error } = useSWR<ITaxOrDiscount[]>("/api/taxes", fetcher);
+  const { data, error } = useSWR<Tax[]>("/api/taxes", fetcher);
 
   return {
     data,

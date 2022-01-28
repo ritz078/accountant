@@ -1,5 +1,5 @@
-import { ICurrency } from "@/types/currency";
+import { Currency } from "@prisma/client";
 
 export interface IMetaResponse {
-  currencies: ICurrency[];
+  currencies: Currency[];
 }

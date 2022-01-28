@@ -1,10 +1,11 @@
-import { ICustomer, ICustomerNew } from "@/types/customer";
+import { CustomerDraft } from "@/types/customer";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
+import { Customer } from "@prisma/client";
 
 export async function createCustomer(
-  customer: ICustomerNew
-): Promise<ICustomer | undefined> {
+  customer: CustomerDraft
+): Promise<Customer | undefined> {
   const res = await fetch("/api/customer", {
     method: "POST",
     headers: {
@@ -17,7 +18,7 @@ export async function createCustomer(
 }
 
 export function useCustomers() {
-  const { data, error } = useSWR<ICustomer[]>("/api/customers", fetcher);
+  const { data, error } = useSWR<Customer[]>("/api/customers", fetcher);
 
   return {
     data,
@@ -26,7 +27,7 @@ export function useCustomers() {
 }
 
 export function useCustomer(id: string) {
-  const { data, error } = useSWR<ICustomer>(`/api/customer/${id}`, fetcher);
+  const { data, error } = useSWR<Customer>(`/api/customer/${id}`, fetcher);
 
   return {
     data,

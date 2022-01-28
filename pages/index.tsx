@@ -63,7 +63,7 @@ const Home: NextPage<ComponentProps> = ({
         onClick: () => setShowAddTaxForm(true),
       },
     ],
-    []
+    [setShowAddCustomerForm, setShowAddTaxForm]
   );
 
   return (

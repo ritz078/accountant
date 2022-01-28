@@ -1,7 +1,6 @@
 import * as Yup from "yup";
-import { ICustomerNew } from "@/types/customer";
 
-export const customerInitialValue: ICustomerNew = {
+export const customerInitialValue = {
   name: "",
   email: null,
   phone: null,

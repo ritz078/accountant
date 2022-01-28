@@ -8,9 +8,11 @@ import { AddTaxPreset } from "@/components/AddTaxPreset";
 import { AddCustomer } from "@/components/AddCustomer";
 import { AddItemForm } from "@/components/AddItemForm";
 import { useMeta } from "@/data/useMeta";
+import { useCustomers } from "@/data/customer";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { data } = useMeta();
+  useCustomers();
 
   const [showAddTaxForm, setShowAddTaxForm] = React.useState(false);
   const [showAddCustomerForm, setShowAddCustomerForm] = React.useState(false);

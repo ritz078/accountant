@@ -1,10 +1,10 @@
 import { Input } from "./Input";
 import React from "react";
 import { useFormik } from "formik";
-import { IItem } from "@/types/invoice";
+import { InvoiceItem } from "@prisma/client";
 
 export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
-  const formik = useFormik<Partial<IItem>>({
+  const formik = useFormik<Partial<InvoiceItem>>({
     initialValues: {},
     onSubmit: (values) => {
       console.log(values);
@@ -48,7 +48,7 @@ export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
             className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="0.00"
             onChange={formik.handleChange}
-            value={formik.values.price}
+            value={formik.values.unitPrice}
           />
           <div className="absolute inset-y-0 right-0 flex items-center">
             <label htmlFor="currency" className="sr-only">
@@ -82,7 +82,7 @@ export const AddItemForm: React.FC<IInvoiceItemsProps> = ({ onClose }) => {
             className="block w-full resize-none rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="Notes"
             onChange={formik.handleChange}
-            value={formik.values.notes}
+            value={formik.values.notes || undefined}
           />
         </div>
       </div>

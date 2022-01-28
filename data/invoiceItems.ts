@@ -1,9 +1,9 @@
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
-import { IItem } from "@/types/api/item";
+import { InvoiceItem } from "@prisma/client";
 
 export function useInvoiceItems() {
-  const { data, error } = useSWR<IItem[]>("/api/invoice-items", fetcher);
+  const { data, error } = useSWR<InvoiceItem[]>("/api/invoice-items", fetcher);
 
   return {
     data,
