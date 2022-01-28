@@ -1,5 +1,4 @@
 import { IItem } from "@/types/api/item";
-import { ICustomer } from "@/types/customer";
 
 export interface ITaxOrDiscount {
   id: number;
@@ -9,7 +8,7 @@ export interface ITaxOrDiscount {
 }
 
 export interface IInvoice {
-  id: string;
+  id: number;
   createdAt: Date;
   invoiceNumber: string | number;
   issueDate: Date;

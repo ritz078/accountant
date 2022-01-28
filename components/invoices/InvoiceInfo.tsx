@@ -12,6 +12,7 @@ import { formatNumber } from "@/utils/number";
 import { IInvoice } from "@/types/invoice";
 import { useMeta } from "@/data/useMeta";
 import { useCustomers } from "@/data/customer";
+import { deleteInvoice, useInvoices } from "@/data/invoices";
 
 export const InvoiceInfo = ({
   position,
@@ -34,6 +35,7 @@ export const InvoiceInfo = ({
 
   const { data: metaData } = useMeta();
   const { data: customers } = useCustomers();
+  const { mutate } = useInvoices();
 
   if (!metaData || !customers) return null;
 
@@ -120,7 +122,11 @@ export const InvoiceInfo = ({
                   <Menu.Item>
                     {({ active }) => (
                       <div
-                        onClick={() => setShowDeleteConfirmation(true)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setShowDeleteConfirmation(true);
+                        }}
                         className={classNames(
                           active ? "bg-gray-100 text-red-900" : "text-red-700",
                           "group flex items-center px-4 py-2 text-sm"
@@ -143,7 +149,9 @@ export const InvoiceInfo = ({
       <AlertModal
         onClose={() => setShowDeleteConfirmation(false)}
         show={showDeleteConfirmation}
-        onConfirm={() => {
+        onConfirm={async () => {
+          await deleteInvoice(id);
+          await mutate();
           setShowDeleteConfirmation(false);
         }}
         title="Delete Invoice"
