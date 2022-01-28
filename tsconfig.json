@@ -32,6 +32,9 @@
       "@/types/*": [
         "./types/*"
       ],
+      "@/data/*": [
+        "./data/*"
+      ],
     }
   },
   "include": [

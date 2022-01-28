@@ -4,3 +4,4 @@ node_modules
 .idea
 .next
 yarn-error.log
+prisma/migrations

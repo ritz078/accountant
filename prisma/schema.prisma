@@ -7,7 +7,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["filterJson"]
 }
 
 model User {
@@ -21,7 +22,7 @@ model User {
 }
 
 model Account {
-  id                 Int       @default(autoincrement()) @id
+  id                 Int       @id @default(autoincrement())
   compoundId         String    @unique @map(name: "compound_id")
   userId             Int       @map(name: "user_id")
   providerType       String    @map(name: "provider_type")
@@ -33,15 +34,15 @@ model Account {
   createdAt          DateTime  @default(now()) @map(name: "created_at")
   updatedAt          DateTime  @default(now()) @map(name: "updated_at")
 
+
   @@index([providerAccountId], name: "providerAccountId")
   @@index([providerId], name: "providerId")
   @@index([userId], name: "userId")
-
   @@map(name: "accounts")
 }
 
 model Session {
-  id           Int      @default(autoincrement()) @id
+  id           Int      @id @default(autoincrement())
   userId       Int      @map(name: "user_id")
   expires      DateTime
   sessionToken String   @unique @map(name: "session_token")
@@ -53,10 +54,102 @@ model Session {
 }
 
 model Currency {
-  id Int @default(autoincrement()) @id
-  name String @unique
-  code String @unique
+  id     Int    @id @default(autoincrement())
+  name   String @unique
+  code   String @unique
   symbol String @unique
 
+  Invoice Invoice[]
   @@map(name: "currencies")
+}
+
+model Address {
+  id        Int        @id @default(autoincrement())
+  line1     String     @map(name: "line_1")
+  line2     String?    @map(name: "line_2")
+  city      String
+  state     String
+  pin       String
+  country   String
+  createdAt DateTime   @default(now()) @map(name: "created_at")
+  updatedAt DateTime   @default(now()) @map(name: "updated_at")
+  Customer  Customer[]
+}
+
+model Customer {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String?  @unique
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @map("updated_at")
+  phone        String?  @unique
+  notes        String?
+  address      Address  @relation(fields: [addressId], references: [id])
+  currencyCode String   @map("currency_code")
+  vatin        String?
+  gstin        String?
+
+  Invoice   Invoice[]
+  addressId Int       @map("address_id")
+  @@map(name: "customers")
+}
+
+model Tax {
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  value        Float
+  type         TaxType
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @map("updated_at")
+  invoices     Invoice[]
+  invoiceItems InvoiceItem[]
+
+  @@map(name: "taxes")
+}
+
+enum TaxType {
+  percentage
+  fixed
+}
+
+model InvoiceItem {
+  id           Int       @id @default(autoincrement())
+  description  String?
+  quantity     Int
+  unitPrice    Float     @map("unit_price")
+  name         String
+  currencyCode String    @map("currency_code")
+  taxes        Tax[]
+  notes        String?
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @map("updated_at")
+
+  @@map(name: "invoice_items")
+}
+
+model Invoice {
+  id            Int           @id @default(autoincrement())
+  customer      Customer      @relation(fields: [customerId], references: [id])
+  customerId    Int           @map("customer_id")
+  invoiceNumber Int        @unique @map("invoice_number")
+  issueDate     DateTime      @map("issue_date")
+  dueDate       DateTime      @map("due_date")
+  currency      Currency      @relation(fields: [currencyCode], references: [code])
+  currencyCode  String        @map("currency_code")
+  notes         String?
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @map("updated_at")
+  total         Float
+  status        InvoiceStatus
+  taxes         Tax[]
+  items         Json
+
+  @@map(name: "invoices")
+}
+
+enum InvoiceStatus {
+  draft
+  issued
+  paid
+  cancelled
 }

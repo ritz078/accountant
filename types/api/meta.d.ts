@@ -1,5 +1,5 @@
 import { ICurrency } from "@/types/currency";
 
-export interface IMeta {
+export interface IMetaResponse {
   currencies: ICurrency[];
 }

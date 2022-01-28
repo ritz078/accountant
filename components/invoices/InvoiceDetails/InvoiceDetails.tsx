@@ -4,10 +4,8 @@ import classNames from "classnames";
 import { formatNumber } from "@/utils/number";
 import { CheckIcon, ThumbUpIcon, UserIcon } from "@heroicons/react/outline";
 import { IInvoice } from "@/types/invoice";
-import useSWR from "swr";
-import { IMeta } from "@/types/api/meta";
-import { fetcher } from "@/utils/fetcher";
-import { customers } from "@/utils/fakeData";
+import { useMeta } from "@/data/useMeta";
+import { useCustomers } from "@/data/customer";
 
 const timeline = [
   {
@@ -61,13 +59,18 @@ export const InvoiceDetails: FC<IInvoice> = ({
   invoiceNumber,
   status,
 }) => {
-  const { data: metaData } = useSWR<IMeta>("/api/meta", fetcher);
+  const { data: metaData } = useMeta();
+  const { data: customers } = useCustomers();
+
+  if (!metaData || !customers) return null;
 
   const currency = metaData?.currencies.find(
     (currency) => currency.code === currencyCode
   );
 
-  const customer = customers.find((customer) => customer.id === customerId);
+  console.log(issueDate);
+
+  const customer = customers?.find((customer) => customer.id === customerId);
 
   return (
     <div className="ml-5 flex h-fit flex-1 flex-col overflow-hidden bg-white shadow sm:rounded-lg">
@@ -90,7 +93,7 @@ export const InvoiceDetails: FC<IInvoice> = ({
           <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-3 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Issue Date</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              {format(issueDate, "MMMM dd, yyyy")}
+              {format(new Date(issueDate), "MMMM dd, yyyy")}
             </dd>
           </div>
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-3 sm:px-6">

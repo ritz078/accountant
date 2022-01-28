@@ -10,10 +10,8 @@ import { AlertModal } from "../AlertModal";
 import { format } from "date-fns";
 import { formatNumber } from "@/utils/number";
 import { IInvoice } from "@/types/invoice";
-import { customers } from "@/utils/fakeData";
-import useSWR from "swr";
-import { fetcher } from "@/utils/fetcher";
-import { IMeta } from "@/types/api/meta";
+import { useMeta } from "@/data/useMeta";
+import { useCustomers } from "@/data/customer";
 
 export const InvoiceInfo = ({
   position,
@@ -23,7 +21,6 @@ export const InvoiceInfo = ({
   position: number;
   onClick: (invoice: IInvoice) => void;
 }) => {
-  const { data: metaData } = useSWR<IMeta>("/api/meta", fetcher);
   const {
     id,
     total,
@@ -35,8 +32,13 @@ export const InvoiceInfo = ({
   } = invoice;
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
-  const customer = customers.find((c) => c.id === customerId);
-  const currency = metaData?.currencies.find((c) => c.id === currencyCode);
+  const { data: metaData } = useMeta();
+  const { data: customers } = useCustomers();
+
+  if (!metaData || !customers) return null;
+
+  const currency = metaData?.currencies.find((c) => c.code === currencyCode);
+  const customer = customers?.find((c) => c.id === customerId);
 
   return (
     <>
@@ -62,7 +64,7 @@ export const InvoiceInfo = ({
           </span>
         </td>
         <td className="whitespace-nowrap py-4 pl-6 text-sm font-medium text-gray-900">
-          {format(issueDate, "yyyy-MM-dd")}
+          {format(new Date(issueDate), "yyyy-MM-dd")}
         </td>
         <td className="whitespace-nowrap py-4 pl-6 text-sm text-gray-500">
           {invoiceNumber}

@@ -4,13 +4,22 @@ import React, { Fragment } from "react";
 import classNames from "classnames";
 import { ITaxOrDiscount } from "@/types/invoice";
 
-function getTaxLabel(tax: ITaxOrDiscount, currencySymbol?: string) {
+function getTaxLabel(
+  tax: ITaxOrDiscount,
+  currencySymbol?: string,
+  formatValue = true
+) {
   return (
-    tax.name +
-    " (" +
-    (tax.type === "percentage"
-      ? `${tax.value}%)`
-      : `${currencySymbol} ${tax.value})`)
+    <>
+      {tax.name}{" "}
+      <span className={formatValue ? `text-xs text-gray-500` : undefined}>
+        (
+        {tax.type === "percentage"
+          ? `${tax.value}%`
+          : `${currencySymbol}${tax.value}`}
+        )
+      </span>
+    </>
   );
 }
 
@@ -31,9 +40,12 @@ export function AddTaxOrDiscount({
             {button || (
               <div className="flex cursor-pointer flex-row items-center rounded-md bg-teal-100 py-1 px-2 text-xs text-gray-500 text-teal-600 hover:bg-teal-200 hover:text-teal-700">
                 {applied.length
-                  ? applied
-                      .map((tax) => getTaxLabel(tax, currencySymbol))
-                      .join(", ")
+                  ? applied.map((tax, i) => (
+                      <Fragment key={tax.id}>
+                        {getTaxLabel(tax, currencySymbol, false)}{" "}
+                        {i === applied.length - 2 && ","}
+                      </Fragment>
+                    ))
                   : "Add Tax"}{" "}
                 <PlusIcon className="ml-1 h-3 w-3" />
               </div>

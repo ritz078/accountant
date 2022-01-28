@@ -47,7 +47,7 @@ export const Input: FC<IInputProps> = ({
           )}
           placeholder={placeholder}
           onChange={onChange}
-          value={value}
+          value={value || undefined}
           min={min}
         />
       </div>
@@ -63,9 +63,9 @@ interface IInputProps {
   className?: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   inputClassName?: string;
-  value?: string | number;
+  value?: string | number | null;
   required?: boolean;
   min?: number;
   prefix?: string;
-  error?: boolean | string;
+  error?: boolean | string | null;
 }

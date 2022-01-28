@@ -19,7 +19,7 @@ export function getAmount(originalAmount: number, taxes: ITaxOrDiscount[]) {
 
 export function getTotalInvoiceAmount(invoice: IInvoice, includeTaxes = true) {
   const sumOfAllItemAmounts = invoice.items.reduce((prev, curr) => {
-    return prev + getAmount(curr.price * curr.quantity, curr.taxes);
+    return prev + getAmount(curr.unitPrice * curr.quantity, curr.taxes);
   }, 0);
 
   return (

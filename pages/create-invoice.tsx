@@ -11,20 +11,23 @@ import { CurrencySelect } from "@/components/Select/CurrencySelect";
 import { AddTaxOrDiscount } from "@/components/CreateInvoice/AddTaxOrDiscount";
 import { getAmount, getTotalInvoiceAmount, schema } from "@/utils/invoice";
 import classNames from "classnames";
-import { customers, items, taxPresets } from "@/utils/fakeData";
 import { formatNumber } from "@/utils/number";
 import { IInvoice } from "@/types/invoice";
 import { SlideOver } from "@/components/SlideOver";
-import useSWR from "swr";
-import { fetcher } from "@/utils/fetcher";
-import { IMeta } from "@/types/api/meta";
+import { useMeta } from "@/data/useMeta";
+import { useCustomers } from "@/data/customer";
+import { useTaxes } from "@/data/taxes";
+import { useInvoiceItems } from "@/data/invoiceItems";
 
 const CreateInvoice: NextPage<{
   setShowAddTaxForm: (show: boolean) => void;
   setShowAddCustomerForm: (show: boolean) => void;
 }> = ({ setShowAddTaxForm, setShowAddCustomerForm }) => {
   const [showAddItemModal, setShowAddItemModal] = useState(false);
-  const { data: metaData } = useSWR<IMeta>("/api/meta", fetcher);
+  const { data: metaData } = useMeta();
+  const { data: customers } = useCustomers();
+  const { data: taxPresets } = useTaxes();
+  const { data: items } = useInvoiceItems();
 
   const formik = useFormik<IInvoice>({
     initialValues: {
@@ -33,10 +36,10 @@ const CreateInvoice: NextPage<{
       issueDate: new Date(),
       dueDate: new Date(addDays(new Date(), 14)),
       notes: "",
-      customerId: null,
+      customer: null,
       items: [],
       taxes: [],
-      currency: "INR",
+      currencyCode: "INR",
     } as never,
     onSubmit: (values) => {
       console.log(values);
@@ -47,7 +50,7 @@ const CreateInvoice: NextPage<{
   const { values, setFieldValue, handleChange, errors, handleSubmit, touched } =
     formik;
 
-  if (!metaData) return null;
+  if (!metaData || !customers || !taxPresets || !items) return null;
 
   const currency = metaData.currencies.find(
     (c) => c.code === values.currencyCode
@@ -72,7 +75,7 @@ const CreateInvoice: NextPage<{
                       label="Customer"
                       required
                       onChange={(selected) =>
-                        setFieldValue("customerId", selected)
+                        setFieldValue("customerId", selected.id)
                       }
                       value={customers.find((c) => c.id === values.customerId)}
                       options={customers}
@@ -164,7 +167,7 @@ const CreateInvoice: NextPage<{
                         <tbody className="!border-gray-100 align-top">
                           {values.items.map((item, itemIndex) => {
                             const {
-                              price,
+                              unitPrice,
                               quantity,
                               taxes,
                               name,
@@ -245,14 +248,14 @@ const CreateInvoice: NextPage<{
                                       name={`items[${itemIndex}].price`}
                                       prefix={currencySymbol}
                                       onChange={handleChange}
-                                      value={price}
+                                      value={unitPrice}
                                     />
                                   </td>
                                   <td className="p-2 py-3 text-right text-sm text-gray-500">
                                     <div className="pt-2">
                                       {currencySymbol}{" "}
                                       {formatNumber(
-                                        getAmount(price * quantity, taxes)
+                                        getAmount(unitPrice * quantity, taxes)
                                       )}
                                     </div>
 

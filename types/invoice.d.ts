@@ -1,7 +1,8 @@
 import { IItem } from "@/types/api/item";
+import { ICustomer } from "@/types/customer";
 
 export interface ITaxOrDiscount {
-  id: string;
+  id: number;
   type: "percentage" | "fixed";
   name: string;
   value: number;

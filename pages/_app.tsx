@@ -7,17 +7,22 @@ import React from "react";
 import { AddTaxPreset } from "@/components/AddTaxPreset";
 import { AddCustomer } from "@/components/AddCustomer";
 import { AddItemForm } from "@/components/AddItemForm";
+import { useMeta } from "@/data/useMeta";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const { data } = useMeta();
+
   const [showAddTaxForm, setShowAddTaxForm] = React.useState(false);
   const [showAddCustomerForm, setShowAddCustomerForm] = React.useState(false);
   const [showAddItemForm, setShowAddItemForm] = React.useState(false);
+
+  if (!data) return <NextProgress />;
 
   return (
     <div className="flex sm:flex-row">
       <NextProgress options={{ showSpinner: false }} />
       <Sidebar />
-      <main className="bg-zinc-100 flex flex-1 min-h-screen p-5">
+      <main className="flex min-h-screen flex-1 bg-zinc-100 p-5">
         <Component
           {...pageProps}
           setShowAddTaxForm={setShowAddTaxForm}

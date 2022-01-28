@@ -3,50 +3,22 @@ import React, { FC } from "react";
 import classNames from "classnames";
 import { CurrencySelect } from "./Select/CurrencySelect";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { ICustomerNew } from "@/types/customer";
+import { customerInitialValue, customerSchema } from "@/utils/forms/customer";
+import { createCustomer } from "@/data/customer";
 
 export const AddCustomer: FC<{
   onClose: () => void;
 }> = ({ onClose }) => {
   const formik = useFormik<ICustomerNew>({
-    initialValues: {
-      name: "",
-      email: "",
-      phone: "",
-      currencyCode: "INR",
-      address: {
-        line1: "",
-        city: "",
-        state: "",
-        pin: "",
-        country: "",
-      },
-      notes: "",
-      vatin: "",
-      gstin: "",
+    initialValues: customerInitialValue,
+    onSubmit: async (values) => {
+      await createCustomer(values);
     },
-    onSubmit: (values) => {
-      console.log(values);
-    },
-    validationSchema: Yup.object().shape({
-      name: Yup.string().required("Name is required"),
-      address: Yup.object().shape({
-        line1: Yup.string().required("Address is required"),
-        city: Yup.string().required("City is required"),
-        state: Yup.string().required("State is required"),
-        pin: Yup.string().required("Pin is required"),
-        country: Yup.string().required("Country is required"),
-      }),
-      currency: Yup.object().shape({
-        id: Yup.string().required("Currency is required"),
-        name: Yup.string().required("Currency is required"),
-        symbol: Yup.string().required("Currency is required"),
-      }),
-    }),
-    validateOnMount: true,
+    validationSchema: customerSchema,
   });
 
+  console.log(formik.errors);
   return (
     <div className="flex flex-1 flex-col">
       <div className="relative mt-6 flex-1 px-4 sm:px-6">
@@ -158,7 +130,7 @@ export const AddCustomer: FC<{
           <CurrencySelect
             label="Currency"
             onChange={(currency) => {
-              formik.setFieldValue("currency", currency);
+              formik.setFieldValue("currencyCode", currency.code);
             }}
             value={formik.values.currencyCode}
           />
@@ -196,6 +168,7 @@ export const AddCustomer: FC<{
           Cancel
         </button>
         <button
+          onClick={() => formik.handleSubmit()}
           type="submit"
           className={classNames(
             "ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2",

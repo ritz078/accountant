@@ -3,7 +3,7 @@ import { PlusIcon, PlusSmIcon } from "@heroicons/react/outline";
 import React, { FC, Fragment } from "react";
 import classNames from "classnames";
 import { formatNumber } from "@/utils/number";
-import { IItem } from "@/types/invoice";
+import { IItem } from "@/types/api/item";
 
 export const AddItem: FC<IAddItemProps> = ({
   items,
@@ -49,7 +49,7 @@ export const AddItem: FC<IAddItemProps> = ({
                     <p className="truncate text-sm font-medium">{item.name}</p>
                     <div className="ml-2 flex flex-shrink-0">
                       <p className="text-sm text-gray-400">
-                        $ {formatNumber(item.price)}
+                        $ {formatNumber(item.unitPrice)}
                       </p>
                     </div>
                   </div>

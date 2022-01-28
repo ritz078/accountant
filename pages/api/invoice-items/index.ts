@@ -1,14 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
-import { IMetaResponse } from "@/types/api/meta";
 
 const prisma = new PrismaClient();
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<IMetaResponse>
+  res: NextApiResponse
 ) {
-  const currencies = await prisma.currency.findMany();
+  if (req.method === "GET") {
+    const invoiceItems = await prisma.invoiceItem.findMany({
+      include: {
+        taxes: true,
+      },
+    });
 
-  res.status(200).json({ currencies });
+    res.status(200).json(invoiceItems);
+  }
 }
