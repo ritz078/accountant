@@ -1,12 +1,13 @@
 import { SettingsLayout } from "@/components/SettingsLayout";
 import { useTaxes } from "@/data/taxes";
 import { NextPage } from "next";
+import { ComponentProps } from "pages/_app";
 
-const Taxes: NextPage = () => {
+const Taxes: NextPage<ComponentProps>  = ({setShowAddTaxForm}) => {
   const { data: taxes } = useTaxes();
 
   return (
-    <SettingsLayout>
+    <SettingsLayout label="Taxes" buttonText="Add Tax" onButtonClick={() => setShowAddTaxForm(true)}>
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -37,17 +38,17 @@ const Taxes: NextPage = () => {
                       key={tax.id}
                       className={taxIndex % 2 === 0 ? "bg-white" : "bg-gray-50"}
                     >
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
+                      <td className="px-6 py-4 text-sm text-gray-900">
                         {tax.name}
 
                         <p className="text-gray-500">{tax.description}</p>
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                      <td className="px-6 py-4 text-sm text-gray-500">
                         {tax.type === "percentage"
                           ? `${tax.value}%`
                           : `${tax.value}`}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                      <td className="px-6 py-4 text-right text-sm font-medium">
                         <a
                           href="#"
                           className="text-indigo-600 hover:text-indigo-900"

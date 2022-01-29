@@ -5,20 +5,23 @@ import { CurrencySelect } from "./Select/CurrencySelect";
 import { useFormik } from "formik";
 import { CustomerDraft } from "@/types/customer";
 import { customerInitialValue, customerSchema } from "@/utils/forms/customer";
-import { createCustomer } from "@/data/customer";
+import { createCustomer, useCustomers } from "@/data/customer";
 
 export const AddCustomer: FC<{
   onClose: () => void;
 }> = ({ onClose }) => {
+  const { mutate } = useCustomers();
+
   const formik = useFormik<CustomerDraft>({
     initialValues: customerInitialValue,
     onSubmit: async (values) => {
       await createCustomer(values);
+      mutate();
+      onClose();
     },
     validationSchema: customerSchema,
   });
 
-  console.log(formik.errors);
   return (
     <div className="flex flex-1 flex-col">
       <div className="relative mt-6 flex-1 px-4 sm:px-6">

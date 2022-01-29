@@ -3,25 +3,33 @@ import { Input } from "./Input";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import classNames from "classnames";
+import { TextArea } from "./TextArea";
+import { TaxDraft } from "@/types/tax";
+import { createTaxPreset, useTaxes } from "@/data/taxes";
 
 export const AddTaxPreset: FC<{
   onClose: () => void;
 }> = ({ onClose }) => {
-  const formik = useFormik({
+  const { mutate } = useTaxes();
+
+  const formik = useFormik<TaxDraft>({
     initialValues: {
       type: "percentage",
       name: "",
       value: 0,
+      description: "",
     },
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values: TaxDraft) => {
+      await createTaxPreset(values);
+      mutate();
+      onClose();
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required("Name is required"),
+      description: Yup.string(),
       value: Yup.number().required("Required"),
       type: Yup.string().required("Required"),
     }),
-    validateOnMount: true,
   });
 
   return (
@@ -74,6 +82,13 @@ export const AddTaxPreset: FC<{
             </select>
           </div>
         </div>
+
+        <TextArea
+          name="description"
+          onChange={formik.handleChange}
+          value={formik.values.description || undefined}
+          label="Description"
+        />
       </div>
       <div className="flex flex-shrink-0 justify-end border-t px-4 py-4">
         <button
@@ -84,6 +99,7 @@ export const AddTaxPreset: FC<{
           Cancel
         </button>
         <button
+          onClick={() => formik.handleSubmit()}
           disabled={!formik.isValid}
           type="submit"
           className={classNames(
