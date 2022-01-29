@@ -30,6 +30,9 @@ const Taxes: NextPage<ComponentProps>  = ({setShowAddTaxForm}) => {
                     <th scope="col" className="relative px-6 py-3">
                       <span className="sr-only">Edit</span>
                     </th>
+                    <th scope="col" className="relative px-6 py-3">
+                      <span className="sr-only">Delete</span>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -54,6 +57,15 @@ const Taxes: NextPage<ComponentProps>  = ({setShowAddTaxForm}) => {
                           className="text-indigo-600 hover:text-indigo-900"
                         >
                           Edit
+                        </a>
+                      </td>
+
+                      <td className="px-6 py-4 text-right text-sm font-medium">
+                        <a
+                          href="#"
+                          className="text-indigo-600 hover:text-indigo-900"
+                        >
+                          Delete
                         </a>
                       </td>
                     </tr>

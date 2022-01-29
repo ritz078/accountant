@@ -1,13 +1,19 @@
+import { AlertModal } from "@/components/AlertModal";
 import { SettingsLayout } from "@/components/SettingsLayout";
-import { useCustomers } from "@/data/customer";
+import { deleteCustomer, useCustomers } from "@/data/customer";
+import { CustomerResponse } from "@/types/customer";
+import { invariant } from "@/utils/invariant";
 import faker from "@faker-js/faker";
 import { NextPage } from "next";
 import Image from "next/image";
 import { ComponentProps } from "pages/_app";
+import { useState } from "react";
 
 const Settings: NextPage<ComponentProps> = ({ setShowAddCustomerForm }) => {
-  const { data: customers } = useCustomers();
-  console.log(customers);
+  const { data: customers, mutate } = useCustomers();
+  const [showDeleteModal, toggleDeleteModal] =
+    useState<CustomerResponse | null>(null);
+
 
   if (!customers) return null;
 
@@ -36,15 +42,12 @@ const Settings: NextPage<ComponentProps> = ({ setShowAddCustomerForm }) => {
                     >
                       Title
                     </th>
-                
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      Role
-                    </th>
+
                     <th scope="col" className="relative px-6 py-3">
                       <span className="sr-only">Edit</span>
+                    </th>
+                    <th scope="col" className="relative px-6 py-3">
+                      <span className="sr-only">Delete</span>
                     </th>
                   </tr>
                 </thead>
@@ -78,16 +81,22 @@ const Settings: NextPage<ComponentProps> = ({ setShowAddCustomerForm }) => {
                           {customer.address.city}
                         </div>
                       </td>
-                      
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                        {customer.currencyCode}
-                      </td>
+
                       <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                         <a
                           href="#"
                           className="text-indigo-600 hover:text-indigo-900"
                         >
                           Edit
+                        </a>
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                        <a
+                          onClick={() => toggleDeleteModal(customer)}
+                          href="#"
+                          className="text-indigo-600 hover:text-indigo-900"
+                        >
+                          Delete
                         </a>
                       </td>
                     </tr>
@@ -97,6 +106,17 @@ const Settings: NextPage<ComponentProps> = ({ setShowAddCustomerForm }) => {
             </div>
           </div>
         </div>
+
+        <AlertModal
+          show={!!showDeleteModal}
+          onConfirm={async () => {
+              invariant(showDeleteModal, "showDeleteModal is null");
+              await deleteCustomer(showDeleteModal!.id);
+          }}
+          onClose={() => toggleDeleteModal(null)}
+          title="Delete Customer"
+          description={`Are you sure you want to delete ${showDeleteModal?.name}?`}
+        />
       </div>
     </SettingsLayout>
   );

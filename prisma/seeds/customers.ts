@@ -7,7 +7,6 @@ export const customers = new Array(6).fill(null).map(() => ({
   email: faker.internet.email().toLowerCase(),
   vatin: null,
   gstin: "ABXDJ2365H",
-  currencyCode: faker.random.arrayElement(currency.map((c) => c.code)),
   notes: faker.lorem.paragraph(),
   updatedAt: faker.date.recent(),
   logo: faker.internet.avatar(),

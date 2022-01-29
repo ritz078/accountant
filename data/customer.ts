@@ -40,3 +40,14 @@ export function useCustomer(id: string) {
     error,
   };
 }
+
+export async function deleteCustomer(id: string) {
+  const res = await fetch(`/api/customers/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res.json();
+}

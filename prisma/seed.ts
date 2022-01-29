@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Currency, PrismaClient } from "@prisma/client";
 import { customers } from "./seeds/customers";
 import { currency } from "./seeds/currency";
 import { taxes } from "./seeds/taxes";
@@ -32,6 +32,11 @@ async function main() {
               },
             ],
           },
+          currency: {
+            connect: {
+              code: faker.random.arrayElement(currency).code,
+            }
+          }
         },
       });
     })
@@ -45,6 +50,11 @@ async function main() {
           address: {
             create: address,
           },
+          currency: {
+            connect: {
+              code: faker.random.arrayElement(currency).code,
+            }
+          }
         },
       })
     )
@@ -78,8 +88,6 @@ async function main() {
       })
     )
   );
-
-  
 }
 
 main()

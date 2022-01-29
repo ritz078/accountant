@@ -18,18 +18,28 @@ model User {
   image     String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @map(name: "updated_at")
-  gstin     String?
-  vatin     String?
-  address   Address  @relation(fields: [addressId], references: [id])
-  currency  Currency @relation(fields: [currencyCode], references: [code])
 
-  currencyCode String
-  addressId    Int
+  Currency   Currency? @relation(fields: [currencyId], references: [id])
+  currencyId Int?
+  Address    Address?  @relation(fields: [addressId], references: [id])
+  addressId  Int?
   @@map(name: "users")
 }
 
+model Settings {
+  id        String   @id @default(cuid())
+  currency  Currency @relation(fields: [currencyCode], references: [code])
+  address   Address  @relation(fields: [addressId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @map(name: "updated_at")
+
+  currencyCode String
+  addressId    Int
+  @@map(name: "settings")
+}
+
 model Account {
-  id                 Int       @id @default(autoincrement())
+  id                 String    @id @default(cuid())
   compoundId         String    @unique @map(name: "compound_id")
   userId             Int       @map(name: "user_id")
   providerType       String    @map(name: "provider_type")
@@ -49,7 +59,7 @@ model Account {
 }
 
 model Session {
-  id           Int      @id @default(autoincrement())
+  id           String   @id @default(cuid())
   userId       Int      @map(name: "user_id")
   expires      DateTime
   sessionToken String   @unique @map(name: "session_token")
@@ -66,8 +76,11 @@ model Currency {
   code   String @unique
   symbol String @unique
 
-  Invoice Invoice[]
-  User    User[]
+  Invoice     Invoice[]
+  User        User[]
+  Settings    Settings[]
+  Customer    Customer[]
+  InvoiceItem InvoiceItem[]
   @@map(name: "currencies")
 }
 
@@ -83,6 +96,7 @@ model Address {
   updatedAt DateTime   @default(now()) @map(name: "updated_at")
   Customer  Customer[]
   User      User[]
+  Settings  Settings[]
 }
 
 model Customer {
@@ -94,7 +108,8 @@ model Customer {
   phone        String?  @unique
   notes        String?
   address      Address  @relation(fields: [addressId], references: [id])
-  currencyCode String   @map("currency_code")
+  currency     Currency @relation(fields: [currencyCode], references: [code])
+  currencyCode String   @map(name: "currency_code")
   vatin        String?
   gstin        String?
   logo         String?
@@ -106,7 +121,7 @@ model Customer {
 
 model Tax {
   id           Int           @id @default(autoincrement())
-  name         String        
+  name         String
   value        Float
   type         TaxType
   description  String?
@@ -129,6 +144,7 @@ model InvoiceItem {
   quantity     Int
   unitPrice    Float    @map("unit_price")
   name         String
+  currency     Currency @relation(fields: [currencyCode], references: [code])
   currencyCode String   @map("currency_code")
   taxes        Tax[]
   notes        String?

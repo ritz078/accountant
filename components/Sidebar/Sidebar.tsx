@@ -15,12 +15,17 @@ import { useRouter } from "next/router";
 import classNames from "classnames";
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
-  { name: "Invoices", href: "/invoices", icon: UsersIcon, current: false },
-  { name: "Expenses", href: "/expenses", icon: FolderIcon, current: false },
-  { name: "Taxes", href: "/taxes", icon: ReceiptTaxIcon, current: false },
-  { name: "Reports", href: "/reports", icon: ChartBarIcon, current: false },
-  { name: "Settings", href: "/settings/customers", icon: CogIcon, current: false },
+  { name: "Dashboard", href: "/", icon: HomeIcon },
+  { name: "Invoices", href: "/invoices", icon: UsersIcon },
+  { name: "Expenses", href: "/expenses", icon: FolderIcon },
+  { name: "Taxes", href: "/taxes", icon: ReceiptTaxIcon },
+  { name: "Reports", href: "/reports", icon: ChartBarIcon },
+  {
+    name: "Settings",
+    href: "/settings/customers",
+    group: "/settings",
+    icon: CogIcon,
+  },
 ];
 
 export const Sidebar = () => {
@@ -135,29 +140,34 @@ export const Sidebar = () => {
           <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
             <div className="flex flex-shrink-0 items-center px-4">LOGO</div>
             <nav className="mt-5 flex-1 space-y-1">
-              {navigation.map((item) => (
-                <Link key={item.name} href={item.href}>
-                  <a
-                    className={classNames(
-                      item.href === router.pathname
-                        ? "border-indigo-600 bg-indigo-50 text-indigo-600"
-                        : "border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                      "group flex items-center border-l-4 px-3 py-2 text-sm font-medium"
-                    )}
-                  >
-                    <item.icon
+              {navigation.map((item) => {
+                const isActive = item.group
+                  ? router.pathname.startsWith(item.group)
+                  : item.href === router.pathname;
+                return (
+                  <Link key={item.name} href={item.href}>
+                    <a
                       className={classNames(
-                        item.current
-                          ? "text-indigo-500"
-                          : "text-gray-400 group-hover:text-gray-500",
-                        "mr-3 h-6 w-6 flex-shrink-0"
+                        isActive
+                          ? "border-indigo-600 bg-indigo-50 text-indigo-600"
+                          : "border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                        "group flex items-center border-l-4 px-3 py-2 text-sm font-medium"
                       )}
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </a>
-                </Link>
-              ))}
+                    >
+                      <item.icon
+                        className={classNames(
+                          isActive
+                            ? "text-indigo-500"
+                            : "text-gray-400 group-hover:text-gray-500",
+                          "mr-3 h-6 w-6 flex-shrink-0"
+                        )}
+                        aria-hidden="true"
+                      />
+                      {item.name}
+                    </a>
+                  </Link>
+                );
+              })}
             </nav>
           </div>
           <div className="flex flex-shrink-0 border-t border-gray-200 p-4">
