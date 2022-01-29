@@ -12,12 +12,19 @@ generator client {
 }
 
 model User {
-  id        String      @id @default(cuid())
+  id        String   @id @default(cuid())
   name      String?
   email     String?  @unique
+  image     String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @map(name: "updated_at")
+  gstin     String?
+  vatin     String?
+  address   Address  @relation(fields: [addressId], references: [id])
+  currency  Currency @relation(fields: [currencyCode], references: [code])
 
+  currencyCode String
+  addressId    Int
   @@map(name: "users")
 }
 
@@ -60,6 +67,7 @@ model Currency {
   symbol String @unique
 
   Invoice Invoice[]
+  User    User[]
   @@map(name: "currencies")
 }
 
@@ -74,6 +82,7 @@ model Address {
   createdAt DateTime   @default(now()) @map(name: "created_at")
   updatedAt DateTime   @default(now()) @map(name: "updated_at")
   Customer  Customer[]
+  User      User[]
 }
 
 model Customer {
@@ -88,6 +97,7 @@ model Customer {
   currencyCode String   @map("currency_code")
   vatin        String?
   gstin        String?
+  logo         String?
 
   Invoice   Invoice[]
   addressId Int       @map("address_id")
@@ -96,9 +106,10 @@ model Customer {
 
 model Tax {
   id           Int           @id @default(autoincrement())
-  name         String        @unique
+  name         String        
   value        Float
   type         TaxType
+  description  String?
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @map("updated_at")
   invoices     Invoice[]
@@ -113,16 +124,16 @@ enum TaxType {
 }
 
 model InvoiceItem {
-  id           Int       @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   description  String?
   quantity     Int
-  unitPrice    Float     @map("unit_price")
+  unitPrice    Float    @map("unit_price")
   name         String
-  currencyCode String    @map("currency_code")
+  currencyCode String   @map("currency_code")
   taxes        Tax[]
   notes        String?
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @map("updated_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @map("updated_at")
 
   @@map(name: "invoice_items")
 }
@@ -131,7 +142,7 @@ model Invoice {
   id            Int           @id @default(autoincrement())
   customer      Customer      @relation(fields: [customerId], references: [id])
   customerId    Int           @map("customer_id")
-  invoiceNumber Int        @unique @map("invoice_number")
+  invoiceNumber Int           @unique @map("invoice_number")
   issueDate     DateTime      @map("issue_date")
   dueDate       DateTime      @map("due_date")
   currency      Currency      @relation(fields: [currencyCode], references: [code])

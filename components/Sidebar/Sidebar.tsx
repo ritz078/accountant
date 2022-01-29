@@ -8,6 +8,7 @@ import {
   UsersIcon,
   XIcon,
   ReceiptTaxIcon,
+  CogIcon,
 } from "@heroicons/react/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -19,6 +20,7 @@ const navigation = [
   { name: "Expenses", href: "/expenses", icon: FolderIcon, current: false },
   { name: "Taxes", href: "/taxes", icon: ReceiptTaxIcon, current: false },
   { name: "Reports", href: "/reports", icon: ChartBarIcon, current: false },
+  { name: "Settings", href: "/settings/customers", icon: CogIcon, current: false },
 ];
 
 export const Sidebar = () => {
@@ -132,7 +134,7 @@ export const Sidebar = () => {
         <div className="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white">
           <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
             <div className="flex flex-shrink-0 items-center px-4">LOGO</div>
-            <nav className="mt-5 flex-1 space-y-1 bg-white">
+            <nav className="mt-5 flex-1 space-y-1">
               {navigation.map((item) => (
                 <Link key={item.name} href={item.href}>
                   <a

@@ -29,7 +29,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@faker-js/faker": "^6.0.0-alpha.3",
+    "@faker-js/faker": "^6.0.0-alpha.5",
     "@types/faker": "^6.6.9",
     "@types/react": "17.0.38",
     "autoprefixer": "^10.4.2",

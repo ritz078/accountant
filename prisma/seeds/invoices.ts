@@ -1,6 +1,5 @@
 import faker from "@faker-js/faker";
 import { taxes } from "./taxes";
-import { JsonArray } from "type-fest";
 
 export const invoices = new Array(15).fill(null).map(() => ({
   invoiceNumber: faker.datatype.number({ min: 100000, max: 999999 }),
@@ -22,5 +21,5 @@ export const invoices = new Array(15).fill(null).map(() => ({
     name: faker.commerce.productName(),
     currencyCode: faker.finance.currencyCode(),
     taxes: [faker.random.arrayElement(taxes)],
-  })) as JsonArray,
+  })) as any,
 }));

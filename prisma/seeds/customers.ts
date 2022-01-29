@@ -4,12 +4,13 @@ import { currency } from "./currency";
 export const customers = new Array(6).fill(null).map(() => ({
   name: faker.name.findName(),
   phone: faker.phone.phoneNumber(),
-  email: faker.internet.email(),
+  email: faker.internet.email().toLowerCase(),
   vatin: null,
   gstin: "ABXDJ2365H",
   currencyCode: faker.random.arrayElement(currency.map((c) => c.code)),
   notes: faker.lorem.paragraph(),
   updatedAt: faker.date.recent(),
+  logo: faker.internet.avatar(),
   address: {
     city: faker.address.city(),
     state: faker.address.state(),

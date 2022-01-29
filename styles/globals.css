@@ -1,8 +1,13 @@
 @import "~currency-flags/dist/currency-flags.css";
+@import url("https://rsms.me/inter/inter.css");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

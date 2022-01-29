@@ -9,10 +9,13 @@ import { AddCustomer } from "@/components/AddCustomer";
 import { AddItemForm } from "@/components/AddItemForm";
 import { useMeta } from "@/data/useMeta";
 import { useCustomers } from "@/data/customer";
+import classNames from "classnames";
+import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { data } = useMeta();
   useCustomers();
+  const router = useRouter();
 
   const [showAddTaxForm, setShowAddTaxForm] = React.useState(false);
   const [showAddCustomerForm, setShowAddCustomerForm] = React.useState(false);
@@ -24,7 +27,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <div className="flex sm:flex-row">
       <NextProgress options={{ showSpinner: false }} />
       <Sidebar />
-      <main className="flex min-h-screen flex-1 bg-zinc-100 p-5">
+      <main className={classNames("flex min-h-screen flex-1 bg-zinc-100", {
+        "p-5": !router.pathname.startsWith("/settings"),
+      })}>
         <Component
           {...pageProps}
           setShowAddTaxForm={setShowAddTaxForm}

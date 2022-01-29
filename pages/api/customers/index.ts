@@ -4,9 +4,12 @@ import { prisma } from "@/utils/prisma";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Customer & {
-    address: Address
-  } | Customer[]>
+  res: NextApiResponse<
+    | (Customer & {
+        address: Address;
+      })
+    | Customer[]
+  >
 ) {
   if (req.method === "POST") {
     const { address, ...customer } = req.body;
@@ -29,7 +32,9 @@ export default async function handler(
 
     res.status(200).json(customerSaved);
   } else if (req.method === "GET") {
-    const customers = await prisma.customer.findMany();
+    const customers = await prisma.customer.findMany({
+      include: { address: true },
+    });
 
     res.status(200).json(customers);
   } else {

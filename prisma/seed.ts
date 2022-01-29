@@ -3,7 +3,7 @@ import { customers } from "./seeds/customers";
 import { currency } from "./seeds/currency";
 import { taxes } from "./seeds/taxes";
 import { invoiceItems } from "./seeds/invoiceItems";
-import faker from "@faker-js/faker/index";
+import faker from "@faker-js/faker";
 import { invoices } from "./seeds/invoices";
 
 const prisma = new PrismaClient();
@@ -11,6 +11,11 @@ const prisma = new PrismaClient();
 async function main() {
   await prisma.tax.createMany({
     data: taxes,
+  });
+
+  await prisma.currency.createMany({
+    data: currency,
+    skipDuplicates: true,
   });
 
   const savedTaxes = await prisma.tax.findMany();
@@ -74,10 +79,7 @@ async function main() {
     )
   );
 
-  await prisma.currency.createMany({
-    data: currency,
-    skipDuplicates: true,
-  });
+  
 }
 
 main()

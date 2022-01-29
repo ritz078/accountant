@@ -1,4 +1,4 @@
-import faker from "@faker-js/faker/index";
+import faker from "@faker-js/faker";
 
 export const taxes = new Array(8).fill(null).map(() => ({
   name: faker.commerce.productName(),
@@ -7,5 +7,6 @@ export const taxes = new Array(8).fill(null).map(() => ({
     "percentage",
     "fixed",
   ]),
+  description: faker.lorem.sentence(),
   updatedAt: faker.date.recent(),
 }));
