@@ -87,29 +87,33 @@ export const Sidebar = () => {
                   Add Logo Here
                 </div>
                 <nav className="mt-5 space-y-1 px-2">
-                  {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className={classNames(
-                        item.current
-                          ? "bg-gray-100 text-gray-900"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                        "group flex items-center rounded-md px-2 py-2 text-base font-medium"
-                      )}
-                    >
-                      <item.icon
+                  {navigation.map((item) => {
+                    const isActive = router.pathname === item.href;
+
+                    return (
+                      <a
+                        key={item.name}
+                        href={item.href}
                         className={classNames(
-                          item.current
-                            ? "text-gray-500"
-                            : "text-gray-400 group-hover:text-gray-500",
-                          "mr-4 h-6 w-6 flex-shrink-0"
+                          isActive
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                          "group flex items-center rounded-md px-2 py-2 text-base font-medium"
                         )}
-                        aria-hidden="true"
-                      />
-                      {item.name}
-                    </a>
-                  ))}
+                      >
+                        <item.icon
+                          className={classNames(
+                            isActive
+                              ? "text-gray-500"
+                              : "text-gray-400 group-hover:text-gray-500",
+                            "mr-4 h-6 w-6 flex-shrink-0"
+                          )}
+                          aria-hidden="true"
+                        />
+                        {item.name}
+                      </a>
+                    );
+                  })}
                 </nav>
               </div>
               <div className="flex flex-shrink-0 border-t border-gray-200 p-4">

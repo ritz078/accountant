@@ -58,9 +58,10 @@ export const AddItem: FC<IAddItemProps> = ({
             ))}
 
             <div className="mt-1 border-t border-gray-100 pt-1">
-              <Menu.Item onClick={onCreate}>
+              <Menu.Item>
                 {({ active }) => (
                   <div
+                    onClick={onCreate}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                       "block flex cursor-pointer flex-row items-center px-4 py-2 text-sm font-medium !text-indigo-600"

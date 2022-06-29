@@ -1,4 +1,4 @@
-import { FC, Fragment } from "react";
+import React, { FC, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import classNames from "classnames";
 
@@ -62,4 +62,5 @@ interface IModalProps {
   open: boolean;
   onClose: () => void;
   className?: string;
+  children: React.ReactNode;
 }

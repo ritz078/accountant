@@ -41,7 +41,7 @@ export function useCustomer(id: string) {
   };
 }
 
-export async function deleteCustomer(id: string) {
+export async function deleteCustomer(id: number) {
   const res = await fetch(`/api/customers/${id}`, {
     method: "DELETE",
     headers: {

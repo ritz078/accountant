@@ -1,5 +1,4 @@
-import faker from "@faker-js/faker";
-import { currency } from "./currency";
+import { faker } from "@faker-js/faker";
 
 export const invoiceItems = new Array(5).fill(null).map(() => ({
   name: faker.commerce.productName(),

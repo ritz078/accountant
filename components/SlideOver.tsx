@@ -7,7 +7,6 @@ export const SlideOver: FC<ISlideOverProps> = ({
   open,
   onClose,
   title,
-  className,
 }) => {
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -81,5 +80,5 @@ interface ISlideOverProps {
   open: boolean;
   onClose: () => void;
   title?: string;
-  className?: string;
+  children: React.ReactNode;
 }

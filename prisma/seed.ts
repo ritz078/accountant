@@ -1,9 +1,9 @@
-import { Currency, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { customers } from "./seeds/customers";
 import { currency } from "./seeds/currency";
 import { taxes } from "./seeds/taxes";
 import { invoiceItems } from "./seeds/invoiceItems";
-import faker from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 import { invoices } from "./seeds/invoices";
 
 const prisma = new PrismaClient();
@@ -28,15 +28,15 @@ async function main() {
           taxes: {
             connect: [
               {
-                id: faker.random.arrayElement(savedTaxes).id,
+                id: faker.helpers.arrayElement(savedTaxes).id,
               },
             ],
           },
           currency: {
             connect: {
-              code: faker.random.arrayElement(currency).code,
-            }
-          }
+              code: faker.helpers.arrayElement(currency).code,
+            },
+          },
         },
       });
     })
@@ -52,9 +52,9 @@ async function main() {
           },
           currency: {
             connect: {
-              code: faker.random.arrayElement(currency).code,
-            }
-          }
+              code: faker.helpers.arrayElement(currency).code,
+            },
+          },
         },
       })
     )
@@ -69,19 +69,19 @@ async function main() {
           ...invoice,
           customer: {
             connect: {
-              id: faker.random.arrayElement(savedCustomers).id,
+              id: faker.helpers.arrayElement(savedCustomers).id,
             },
           },
           taxes: {
             connect: [
               {
-                id: faker.random.arrayElement(savedTaxes).id,
+                id: faker.helpers.arrayElement(savedTaxes).id,
               },
             ],
           },
           currency: {
             connect: {
-              code: faker.random.arrayElement(currency).code,
+              code: faker.helpers.arrayElement(currency).code,
             },
           },
         },

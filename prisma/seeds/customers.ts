@@ -1,9 +1,8 @@
-import faker from "@faker-js/faker";
-import { currency } from "./currency";
+import { faker } from "@faker-js/faker";
 
 export const customers = new Array(6).fill(null).map(() => ({
   name: faker.name.findName(),
-  phone: faker.phone.phoneNumber(),
+  phone: faker.phone.number(),
   email: faker.internet.email().toLowerCase(),
   vatin: null,
   gstin: "ABXDJ2365H",

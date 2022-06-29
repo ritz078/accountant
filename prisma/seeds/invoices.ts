@@ -1,4 +1,4 @@
-import faker from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 import { taxes } from "./taxes";
 
 export const invoices = new Array(15).fill(null).map(() => ({
@@ -6,12 +6,9 @@ export const invoices = new Array(15).fill(null).map(() => ({
   issueDate: faker.date.past(),
   dueDate: faker.date.future(),
   notes: faker.lorem.paragraph(),
-  status: faker.random.arrayElement<"draft" | "issued" | "paid" | "cancelled">([
-    "draft",
-    "issued",
-    "paid",
-    "cancelled",
-  ]),
+  status: faker.helpers.arrayElement<"draft" | "issued" | "paid" | "cancelled">(
+    ["draft", "issued", "paid", "cancelled"]
+  ),
   total: faker.datatype.number(200000),
   updatedAt: faker.date.recent(),
   items: new Array(2).fill(null).map(() => ({
@@ -20,6 +17,6 @@ export const invoices = new Array(15).fill(null).map(() => ({
     unitPrice: faker.datatype.number(10000),
     name: faker.commerce.productName(),
     currencyCode: faker.finance.currencyCode(),
-    taxes: [faker.random.arrayElement(taxes)],
+    taxes: [faker.helpers.arrayElement(taxes)],
   })) as any,
 }));

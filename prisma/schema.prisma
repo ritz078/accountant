@@ -1,122 +1,117 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["filterJson"]
-}
-
 model User {
-  id        String   @id @default(cuid())
-  name      String?
-  email     String?  @unique
-  image     String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @map(name: "updated_at")
-
-  Currency   Currency? @relation(fields: [currencyId], references: [id])
+  id         String    @id @default(cuid())
+  name       String?
+  email      String?   @unique
+  image      String?
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @map("updated_at")
   currencyId Int?
-  Address    Address?  @relation(fields: [addressId], references: [id])
   addressId  Int?
-  @@map(name: "users")
+  Address    Address?  @relation(fields: [addressId], references: [id])
+  Currency   Currency? @relation(fields: [currencyId], references: [id])
+
+  @@map("users")
 }
 
 model Settings {
-  id        String   @id @default(cuid())
-  currency  Currency @relation(fields: [currencyCode], references: [code])
-  address   Address  @relation(fields: [addressId], references: [id])
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @map(name: "updated_at")
-
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @map("updated_at")
   currencyCode String
   addressId    Int
-  @@map(name: "settings")
+  address      Address  @relation(fields: [addressId], references: [id])
+  currency     Currency @relation(fields: [currencyCode], references: [code])
+
+  @@map("settings")
 }
 
 model Account {
   id                 String    @id @default(cuid())
-  compoundId         String    @unique @map(name: "compound_id")
-  userId             Int       @map(name: "user_id")
-  providerType       String    @map(name: "provider_type")
-  providerId         String    @map(name: "provider_id")
-  providerAccountId  String    @map(name: "provider_account_id")
-  refreshToken       String?   @map(name: "refresh_token")
-  accessToken        String?   @map(name: "access_token")
-  accessTokenExpires DateTime? @map(name: "access_token_expires")
-  createdAt          DateTime  @default(now()) @map(name: "created_at")
-  updatedAt          DateTime  @default(now()) @map(name: "updated_at")
+  compoundId         String    @unique @map("compound_id")
+  userId             Int       @map("user_id")
+  providerType       String    @map("provider_type")
+  providerId         String    @map("provider_id")
+  providerAccountId  String    @map("provider_account_id")
+  refreshToken       String?   @map("refresh_token")
+  accessToken        String?   @map("access_token")
+  accessTokenExpires DateTime? @map("access_token_expires")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @default(now()) @map("updated_at")
 
-
-  @@index([providerAccountId], name: "providerAccountId")
-  @@index([providerId], name: "providerId")
-  @@index([userId], name: "userId")
-  @@map(name: "accounts")
+  @@index([providerAccountId], map: "providerAccountId")
+  @@index([providerId], map: "providerId")
+  @@index([userId], map: "userId")
+  @@map("accounts")
 }
 
 model Session {
   id           String   @id @default(cuid())
-  userId       Int      @map(name: "user_id")
+  userId       Int      @map("user_id")
   expires      DateTime
-  sessionToken String   @unique @map(name: "session_token")
-  accessToken  String   @unique @map(name: "access_token")
-  createdAt    DateTime @default(now()) @map(name: "created_at")
-  updatedAt    DateTime @default(now()) @map(name: "updated_at")
+  sessionToken String   @unique @map("session_token")
+  accessToken  String   @unique @map("access_token")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @map("updated_at")
 
-  @@map(name: "sessions")
+  @@map("sessions")
 }
 
 model Currency {
-  id     Int    @id @default(autoincrement())
-  name   String @unique
-  code   String @unique
-  symbol String @unique
-
-  Invoice     Invoice[]
-  User        User[]
-  Settings    Settings[]
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  code        String        @unique
+  symbol      String        @unique
   Customer    Customer[]
   InvoiceItem InvoiceItem[]
-  @@map(name: "currencies")
+  Invoice     Invoice[]
+  Settings    Settings[]
+  User        User[]
+
+  @@map("currencies")
 }
 
 model Address {
   id        Int        @id @default(autoincrement())
-  line1     String     @map(name: "line_1")
-  line2     String?    @map(name: "line_2")
+  line1     String     @map("line_1")
+  line2     String?    @map("line_2")
   city      String
   state     String
   pin       String
   country   String
-  createdAt DateTime   @default(now()) @map(name: "created_at")
-  updatedAt DateTime   @default(now()) @map(name: "updated_at")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @default(now()) @map("updated_at")
   Customer  Customer[]
-  User      User[]
   Settings  Settings[]
+  User      User[]
 }
 
 model Customer {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   name         String
-  email        String?  @unique
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @map("updated_at")
-  phone        String?  @unique
+  email        String?   @unique
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @map("updated_at")
+  phone        String?   @unique
   notes        String?
-  address      Address  @relation(fields: [addressId], references: [id])
-  currency     Currency @relation(fields: [currencyCode], references: [code])
-  currencyCode String   @map(name: "currency_code")
+  currencyCode String    @map("currency_code")
   vatin        String?
   gstin        String?
   logo         String?
+  addressId    Int       @map("address_id")
+  address      Address   @relation(fields: [addressId], references: [id])
+  currency     Currency  @relation(fields: [currencyCode], references: [code])
+  Invoice      Invoice[]
 
-  Invoice   Invoice[]
-  addressId Int       @map("address_id")
-  @@map(name: "customers")
+  @@map("customers")
 }
 
 model Tax {
@@ -127,15 +122,10 @@ model Tax {
   description  String?
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @map("updated_at")
-  invoices     Invoice[]
   invoiceItems InvoiceItem[]
+  invoices     Invoice[]
 
-  @@map(name: "taxes")
-}
-
-enum TaxType {
-  percentage
-  fixed
+  @@map("taxes")
 }
 
 model InvoiceItem {
@@ -144,34 +134,39 @@ model InvoiceItem {
   quantity     Int
   unitPrice    Float    @map("unit_price")
   name         String
-  currency     Currency @relation(fields: [currencyCode], references: [code])
   currencyCode String   @map("currency_code")
-  taxes        Tax[]
   notes        String?
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @map("updated_at")
+  currency     Currency @relation(fields: [currencyCode], references: [code])
+  taxes        Tax[]
 
-  @@map(name: "invoice_items")
+  @@map("invoice_items")
 }
 
 model Invoice {
   id            Int           @id @default(autoincrement())
-  customer      Customer      @relation(fields: [customerId], references: [id])
   customerId    Int           @map("customer_id")
   invoiceNumber Int           @unique @map("invoice_number")
   issueDate     DateTime      @map("issue_date")
   dueDate       DateTime      @map("due_date")
-  currency      Currency      @relation(fields: [currencyCode], references: [code])
   currencyCode  String        @map("currency_code")
   notes         String?
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime      @map("updated_at")
   total         Float
   status        InvoiceStatus
-  taxes         Tax[]
   items         Json
+  currency      Currency      @relation(fields: [currencyCode], references: [code])
+  customer      Customer      @relation(fields: [customerId], references: [id])
+  taxes         Tax[]
 
-  @@map(name: "invoices")
+  @@map("invoices")
+}
+
+enum TaxType {
+  percentage
+  fixed
 }
 
 enum InvoiceStatus {

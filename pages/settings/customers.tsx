@@ -3,17 +3,15 @@ import { SettingsLayout } from "@/components/SettingsLayout";
 import { deleteCustomer, useCustomers } from "@/data/customer";
 import { CustomerResponse } from "@/types/customer";
 import { invariant } from "@/utils/invariant";
-import faker from "@faker-js/faker";
 import { NextPage } from "next";
 import Image from "next/image";
 import { ComponentProps } from "pages/_app";
 import { useState } from "react";
 
 const Settings: NextPage<ComponentProps> = ({ setShowAddCustomerForm }) => {
-  const { data: customers, mutate } = useCustomers();
+  const { data: customers } = useCustomers();
   const [showDeleteModal, toggleDeleteModal] =
     useState<CustomerResponse | null>(null);
-
 
   if (!customers) return null;
 
@@ -110,8 +108,8 @@ const Settings: NextPage<ComponentProps> = ({ setShowAddCustomerForm }) => {
         <AlertModal
           show={!!showDeleteModal}
           onConfirm={async () => {
-              invariant(showDeleteModal, "showDeleteModal is null");
-              await deleteCustomer(showDeleteModal!.id);
+            invariant(showDeleteModal, "`showDeleteModal` is null");
+            await deleteCustomer(showDeleteModal.id);
           }}
           onClose={() => toggleDeleteModal(null)}
           title="Delete Customer"
