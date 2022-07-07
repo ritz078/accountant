@@ -25,7 +25,7 @@ const Invoices: NextPage = () => {
               </h3>
             </div>
             <div className="ml-4 mt-2 flex-shrink-0">
-              <Link href="/create-invoice">
+              <Link href="/invoice">
                 <button
                   type="button"
                   className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -44,7 +44,6 @@ const Invoices: NextPage = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="py-3 pl-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500" />
                       <th
                         scope="col"
                         className="py-3 pl-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -63,6 +62,7 @@ const Invoices: NextPage = () => {
                       >
                         Customer
                       </th>
+                      <th className="py-3 pl-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500" />
                       <th
                         scope="col"
                         className="py-3 pl-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
@@ -75,12 +75,13 @@ const Invoices: NextPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {invoices.map((invoice, personIdx) => (
+                    {invoices.map((_invoice, personIdx) => (
                       <InvoiceInfo
-                        key={invoice.id}
+                        key={_invoice.id}
                         position={personIdx}
                         onClick={(invoice) => setInvoice(invoice)}
-                        {...invoice}
+                        isSelected={invoice?.id === _invoice.id}
+                        {..._invoice}
                       />
                     ))}
                   </tbody>

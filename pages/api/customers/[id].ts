@@ -47,5 +47,24 @@ export default async function handler(
         message: error.message,
       });
     }
+  } else if (req.method === "PUT") {
+    try {
+      const updatedCustomer = await prisma.customer.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          ...req.body,
+        },
+      });
+
+      res.status(200).json(updatedCustomer);
+    } catch (e) {
+      invariant(e instanceof Error, "Customer not updated");
+
+      res.status(404).json({
+        message: e.message,
+      });
+    }
   }
 }

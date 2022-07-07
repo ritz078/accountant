@@ -1,48 +1,54 @@
-import { NextPage } from "next";
-import { Select } from "@/components/Select/Select";
-import { Input } from "@/components/Input";
 import React, { Fragment, useState } from "react";
-import { PlusSmIcon, TrashIcon } from "@heroicons/react/outline";
-import { AddItem } from "@/components/CreateInvoice/AddItem";
-import { AddItemForm } from "@/components/AddItemForm";
-import { useFormik } from "formik";
-import { addDays, format } from "date-fns";
-import { CurrencySelect } from "@/components/Select/CurrencySelect";
-import { AddTaxOrDiscount } from "@/components/CreateInvoice/AddTaxOrDiscount";
-import { getAmount, getTotalInvoiceAmount, schema } from "@/utils/invoice";
-import classNames from "classnames";
-import { formatNumber } from "@/utils/number";
-import { IInvoice } from "@/types/invoice";
-import { SlideOver } from "@/components/SlideOver";
 import { useMeta } from "@/data/useMeta";
 import { useCustomers } from "@/data/customer";
 import { useTaxes } from "@/data/taxes";
 import { useInvoiceItems } from "@/data/invoiceItems";
+import { useFormik } from "formik";
+import { IInvoice } from "@/types/invoice";
+import { addDays, format, parseISO } from "date-fns";
+import { getAmount, getTotalInvoiceAmount, schema } from "@/utils/invoice";
+import { Select } from "@/components/Select/Select";
+import { PlusSmIcon, TrashIcon } from "@heroicons/react/outline";
+import { Input } from "@/components/Input";
+import { AddTaxOrDiscount } from "@/components/CreateInvoice/AddTaxOrDiscount";
+import { formatNumber } from "@/utils/number";
+import classNames from "classnames";
+import { AddItem } from "@/components/CreateInvoice/AddItem";
+import { SlideOver } from "@/components/SlideOver";
+import { AddItemForm } from "@/components/AddItemForm";
+import { CurrencySelect } from "@/components/Select/CurrencySelect";
+import { createInvoice, updateInvoice, useInvoices } from "@/data/invoices";
 
-const CreateInvoice: NextPage<{
+export const Invoice: React.FC<{
   setShowAddTaxForm: (show: boolean) => void;
   setShowAddCustomerForm: (show: boolean) => void;
-}> = ({ setShowAddTaxForm, setShowAddCustomerForm }) => {
+  invoice?: IInvoice;
+}> = ({ setShowAddTaxForm, setShowAddCustomerForm, invoice }) => {
   const [showAddItemModal, setShowAddItemModal] = useState(false);
   const { data: metaData } = useMeta();
   const { data: customers } = useCustomers();
   const { data: taxPresets } = useTaxes();
   const { data: items } = useInvoiceItems();
+  const { mutate } = useInvoices();
 
   const formik = useFormik<IInvoice>({
-    initialValues: {
-      id: 6,
-      invoiceNumber: "INV-00006",
-      issueDate: new Date(),
-      dueDate: new Date(addDays(new Date(), 14)),
-      notes: "",
-      customer: null,
-      items: [],
-      taxes: [],
-      currencyCode: "INR",
-    } as never,
-    onSubmit: (values) => {
-      console.log(values);
+    initialValues:
+      invoice ||
+      ({
+        id: 6,
+        invoiceNumber: "INV-00006",
+        issueDate: new Date(),
+        dueDate: new Date(addDays(new Date(), 14)),
+        notes: "",
+        customer: null,
+        items: [],
+        taxes: [],
+        currencyCode: "INR",
+      } as never),
+    onSubmit: async (values) => {
+      debugger;
+      await (invoice ? updateInvoice(values) : createInvoice(values));
+      await mutate();
     },
     validationSchema: schema,
   });
@@ -57,40 +63,60 @@ const CreateInvoice: NextPage<{
   );
 
   const currencySymbol = currency?.symbol;
+  const customer = customers.find((c) => c.id === values.customerId);
+  const address = customer?.address;
 
   return (
     <div className="flex flex-1 gap-4">
       <div className="w-8/12 shrink-0 grow-0">
         <h3 className="text-lg font-medium leading-6 text-gray-900">
-          Create Invoice
+          {invoice ? `Invoice #${invoice.invoiceNumber}` : "Create Invoice"}
         </h3>
         <div className="mt-5 h-fit shrink-0 flex-col overflow-hidden rounded-lg bg-white shadow">
           <div className="flex flex-1 flex-col overflow-x-hidden">
             <div className="relative my-6 px-4 sm:px-6">
               <div className="flex flex-row justify-between gap-28">
-                <div className="flex h-fit w-1/2 flex-row gap-2">
-                  <div className="flex flex-1 flex-col">
-                    <Select
-                      error={!!(touched.customerId && errors.customerId)}
-                      label="Customer"
-                      required
-                      onChange={(selected) =>
-                        setFieldValue("customerId", selected.id)
-                      }
-                      value={customers.find((c) => c.id === values.customerId)}
-                      options={customers}
-                      placeholder="Select your customer"
-                      buttonClassName="shadow-none"
-                    />
+                <div className="flex h-fit w-1/2 flex-col">
+                  <div className="flex w-full flex-row gap-2">
+                    <div className="flex flex-1 flex-col">
+                      <Select
+                        error={!!(touched.customerId && errors.customerId)}
+                        label="Customer"
+                        required
+                        onChange={(selected) =>
+                          setFieldValue("customerId", selected.id)
+                        }
+                        value={customers.find(
+                          (c) => c.id === values.customerId
+                        )}
+                        options={customers}
+                        placeholder="Select your customer"
+                        buttonClassName="shadow-none"
+                      />
+                    </div>
+
+                    <button
+                      onClick={() => setShowAddCustomerForm(true)}
+                      type="button"
+                      className="inline-flex h-fit items-center self-end rounded-full border border-transparent bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                      <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
+                    </button>
+                  </div>
+                  <div className="mt-5 rounded-sm border border-gray-200 bg-gray-100 bg-opacity-50 p-4 text-sm text-gray-900">
+                    <div>{address?.line1}</div>
+                    <div>{address?.line2}</div>
+                    <div>
+                      {address?.city}-{address?.pin}
+                    </div>
+                    <div>
+                      {address?.state}, {address?.country}
+                    </div>
                   </div>
 
-                  <button
-                    onClick={() => setShowAddCustomerForm(true)}
-                    type="button"
-                    className="inline-flex h-fit items-center self-end rounded-full border border-transparent bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
-                  </button>
+                  <div className="mt-2 cursor-pointer text-right text-sm text-indigo-600 hover:underline">
+                    Edit Customer Details
+                  </div>
                 </div>
 
                 <div className="flex flex-1 flex-col gap-2">
@@ -114,7 +140,12 @@ const CreateInvoice: NextPage<{
                     onChange={(e) =>
                       setFieldValue("issueDate", new Date(e.target.value))
                     }
-                    value={format(values.issueDate, "yyyy-MM-dd")}
+                    value={format(
+                      typeof values.issueDate === "string"
+                        ? parseISO(values.issueDate)
+                        : values.issueDate,
+                      "yyyy-MM-dd"
+                    )}
                   />
 
                   <Input
@@ -126,7 +157,12 @@ const CreateInvoice: NextPage<{
                     onChange={(e) =>
                       setFieldValue("dueDate", new Date(e.target.value))
                     }
-                    value={format(values.dueDate, "yyyy-MM-dd")}
+                    value={format(
+                      typeof values.dueDate === "string"
+                        ? parseISO(values.dueDate)
+                        : values.dueDate,
+                      "yyyy-MM-dd"
+                    )}
                   />
                 </div>
               </div>
@@ -330,7 +366,7 @@ const CreateInvoice: NextPage<{
                     </span>
                   </div>
 
-                  {values.taxes.map((tax) => (
+                  {values.taxes?.map((tax) => (
                     <div
                       key={tax.id}
                       className="flex items-center justify-between py-1 text-sm text-gray-600"
@@ -437,5 +473,3 @@ const CreateInvoice: NextPage<{
     </div>
   );
 };
-
-export default CreateInvoice;

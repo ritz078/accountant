@@ -31,22 +31,19 @@ export function getTotalInvoiceAmount(invoice: IInvoice, includeTaxes = true) {
 
 export const schema = Yup.object().shape({
   invoiceNumber: Yup.string().required("Invoice number is required"),
-  issueDate: Yup.date().required("Required"),
-  dueDate: Yup.date().required("Required"),
+  issueDate: Yup.date().required("Issue date is required"),
+  dueDate: Yup.date().required("Due date is required"),
   items: Yup.array()
     .of(
       Yup.object().shape({
-        name: Yup.string().required("Required"),
-        quantity: Yup.number().required("Required"),
-        price: Yup.number().required("Required"),
+        name: Yup.string().required("Item name is required"),
+        quantity: Yup.number().required("Item quantity is required"),
+        unitPrice: Yup.number().required("Item unit price is required"),
       })
     )
     .min(1, "At least one item is required")
-    .required("Required"),
-  currency: Yup.object().shape({
-    name: Yup.string().required("Required"),
-    symbol: Yup.string().required("Required"),
-  }),
-  total: Yup.number().required("Required"),
-  customer: Yup.object().required("Required"),
+    .required("Items are required"),
+  currencyCode: Yup.string().required("Currency code is required"),
+  total: Yup.number().required("Total is required"),
+  customerId: Yup.number().required("Customer is required"),
 });

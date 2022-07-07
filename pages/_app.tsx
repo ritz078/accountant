@@ -25,11 +25,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <div className="flex sm:flex-row">
-      <NextProgress options={{ showSpinner: false }} />
+      <NextProgress height={4} options={{ showSpinner: false }} />
       <Sidebar />
-      <main className={classNames("flex min-h-screen flex-1 bg-zinc-100", {
-        "p-5": !router.pathname.startsWith("/settings"),
-      })}>
+      <main
+        className={classNames("flex min-h-screen flex-1 bg-zinc-100", {
+          "p-5": !router.pathname.startsWith("/settings"),
+        })}
+      >
         <Component
           {...pageProps}
           setShowAddTaxForm={setShowAddTaxForm}

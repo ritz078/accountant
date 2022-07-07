@@ -4,9 +4,9 @@ import { deleteCustomer, useCustomers } from "@/data/customer";
 import { CustomerResponse } from "@/types/customer";
 import { invariant } from "@/utils/invariant";
 import { NextPage } from "next";
-import Image from "next/image";
 import { ComponentProps } from "pages/_app";
 import { useState } from "react";
+import { TrashIcon } from "@heroicons/react/outline";
 
 const Settings: NextPage<ComponentProps> = ({ setShowAddCustomerForm }) => {
   const { data: customers } = useCustomers();
@@ -111,6 +111,7 @@ const Settings: NextPage<ComponentProps> = ({ setShowAddCustomerForm }) => {
             invariant(showDeleteModal, "`showDeleteModal` is null");
             await deleteCustomer(showDeleteModal.id);
           }}
+          Icon={TrashIcon}
           onClose={() => toggleDeleteModal(null)}
           title="Delete Customer"
           description={`Are you sure you want to delete ${showDeleteModal?.name}?`}

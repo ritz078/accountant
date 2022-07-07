@@ -17,10 +17,12 @@ import { deleteInvoice, useInvoices } from "@/data/invoices";
 export const InvoiceInfo = ({
   position,
   onClick,
+  isSelected,
   ...invoice
 }: IInvoice & {
   position: number;
   onClick: (invoice: IInvoice) => void;
+  isSelected: boolean;
 }) => {
   const {
     id,
@@ -49,41 +51,81 @@ export const InvoiceInfo = ({
         key={id}
         className={classNames(
           position % 2 === 0 ? "bg-white" : "bg-gray-50",
-          "cursor-pointer"
+          "cursor-pointer",
+          {
+            "bg-gradient-to-r from-indigo-500 to-blue-500": isSelected,
+          }
         )}
       >
+        <td
+          className={classNames(
+            "whitespace-nowrap py-4 pl-6 text-sm font-medium text-gray-900",
+            {
+              "text-white": isSelected,
+            }
+          )}
+        >
+          {format(new Date(issueDate), "yyyy-MM-dd")}
+        </td>
+        <td
+          className={classNames(
+            "whitespace-nowrap py-4 pl-6 text-sm text-gray-500",
+            {
+              "text-gray-100": isSelected,
+            }
+          )}
+        >
+          {invoiceNumber}
+        </td>
+        <td
+          className={classNames(
+            "whitespace-nowrap py-4 pl-6 text-sm text-gray-500",
+            {
+              "text-gray-100": isSelected,
+            }
+          )}
+        >
+          {customer?.name}
+        </td>
         <td className="whitespace-nowrap py-4 pl-6 text-sm font-medium text-gray-900">
           <span
             className={classNames(
-              "inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium capitalize text-indigo-800",
+              "inline-flex items-center rounded-full bg-indigo-100 bg-opacity-70 px-2.5 py-0.5 text-xs font-medium capitalize text-indigo-800",
               {
-                "bg-yellow-100 text-yellow-600": status === "issued",
-                "bg-green-200 text-green-700": status === "paid",
+                "bg-yellow-100 text-yellow-800": status === "issued",
+                "bg-green-200 text-green-800": status === "paid",
               }
             )}
           >
             {status}
           </span>
         </td>
-        <td className="whitespace-nowrap py-4 pl-6 text-sm font-medium text-gray-900">
-          {format(new Date(issueDate), "yyyy-MM-dd")}
-        </td>
-        <td className="whitespace-nowrap py-4 pl-6 text-sm text-gray-500">
-          {invoiceNumber}
-        </td>
-        <td className="whitespace-nowrap py-4 pl-6 text-sm text-gray-500">
-          {customer?.name}
-        </td>
-        <td className="whitespace-nowrap py-4 pl-6 text-sm text-gray-500">
-          <span className="min-w-5 mr-1 inline-block text-gray-400">
-            {currency?.symbol}
-          </span>
+
+        <td
+          className={classNames(
+            "whitespace-nowrap py-4 pl-6 text-sm text-gray-500",
+            {
+              "text-gray-100": isSelected,
+            }
+          )}
+        >
+          <span className="min-w-5 mr-1 inline-block">{currency?.symbol}</span>
           {formatNumber(total)}
         </td>
-        <td className="whitespace-nowrap px-6 py-2.5 text-right text-sm font-medium">
+        <td
+          onClick={(e) => e.stopPropagation()}
+          className="whitespace-nowrap px-6 py-2.5 text-right text-sm font-medium"
+        >
           <Menu as="div" className="relative inline-block text-left">
             <div>
-              <Menu.Button className="flex items-center rounded-full bg-gray-100 p-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+              <Menu.Button
+                className={classNames(
+                  "flex items-center rounded-full p-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100",
+                  {
+                    "!text-white": isSelected,
+                  }
+                )}
+              >
                 <span className="sr-only">Open options</span>
                 <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
               </Menu.Button>
@@ -103,7 +145,7 @@ export const InvoiceInfo = ({
                   <Menu.Item>
                     {({ active }) => (
                       <a
-                        href="#"
+                        href={`/invoice/${id}`}
                         className={classNames(
                           active
                             ? "bg-gray-100 text-gray-900"

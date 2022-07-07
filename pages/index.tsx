@@ -67,16 +67,16 @@ const Home: NextPage<ComponentProps> = ({
   );
 
   return (
-    <div className="flex flex-row flex-1">
+    <div className="flex flex-1 flex-row">
       <div className="w-8/12">
-        <div className="flex flex-row justify-between items-center">
-          <h3 className="text-lg leading-6 font-medium text-gray-900">
+        <div className="flex flex-row items-center justify-between">
+          <h3 className="text-lg font-medium leading-6 text-gray-900">
             FY 2021-22
           </h3>
 
           <Menu as="div" className="relative inline-block text-left">
             <div>
-              <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-100 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-100 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
                 Create
                 <ChevronDownIcon
                   className="-mr-1 ml-2 h-5 w-5"
@@ -94,13 +94,13 @@ const Home: NextPage<ComponentProps> = ({
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="z-10 py-1 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+              <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 {createMenuList.map(({ label, Icon, href, onClick }) => (
                   <div className="border-none" key={label}>
                     <Menu.Item>
                       {({ active }) =>
                         href ? (
-                          <Link href="/create-invoice">
+                          <Link href="/Invoice">
                             <a
                               className={classNames(
                                 active
@@ -123,7 +123,7 @@ const Home: NextPage<ComponentProps> = ({
                               active
                                 ? "bg-gray-100 text-gray-900"
                                 : "text-gray-700",
-                              "group cursor-pointer flex items-center px-4 py-2 text-sm"
+                              "group flex cursor-pointer items-center px-4 py-2 text-sm"
                             )}
                           >
                             <Icon
@@ -141,20 +141,20 @@ const Home: NextPage<ComponentProps> = ({
             </Transition>
           </Menu>
         </div>
-        <dl className="mt-5 grid grid-cols-1 shadow rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 overflow-hidden divide-y md:grid-cols-3 md:divide-y-0">
+        <dl className="mt-5 grid grid-cols-1 divide-y overflow-hidden rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 shadow md:grid-cols-3 md:divide-y-0">
           {stats.map((item) => (
             <div
               key={item.name}
-              className="relative pt-5 px-4 pb-6 sm:pt-6 sm:px-6 overflow-hidden"
+              className="relative overflow-hidden px-4 pt-5 pb-6 sm:px-6 sm:pt-6"
             >
               <dt>
-                <div className="absolute bg-white/[0.2] rounded-md p-3">
+                <div className="absolute rounded-md bg-white/[0.2] p-3">
                   <item.icon
                     className="h-6 w-6 text-white"
                     aria-hidden="true"
                   />
                 </div>
-                <p className="ml-16 text-sm font-medium text-gray-200 truncate">
+                <p className="ml-16 truncate text-sm font-medium text-gray-200">
                   {item.name}
                 </p>
               </dt>

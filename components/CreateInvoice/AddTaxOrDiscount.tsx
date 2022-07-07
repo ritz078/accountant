@@ -73,7 +73,7 @@ export function AddTaxOrDiscount({
                     {getTaxLabel(tax, currencySymbol)}
                   </span>
 
-                  {applied.some((aTax) => aTax.id === tax.id) && (
+                  {applied?.some((aTax) => aTax.id === tax.id) && (
                     <CheckIcon className="h-5 w-5" />
                   )}
                 </div>
