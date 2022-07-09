@@ -16,6 +16,20 @@ export async function createCustomer(
   return res.json();
 }
 
+export async function updateCustomer(
+  customer: CustomerResponse
+): Promise<CustomerResponse> {
+  const res = await fetch(`/api/customers/${customer.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(customer),
+  });
+
+  return res.json();
+}
+
 export function useCustomers() {
   const { data, error, mutate } = useSWR<CustomerResponse[]>(
     "/api/customers",
@@ -29,9 +43,9 @@ export function useCustomers() {
   };
 }
 
-export function useCustomer(id: string) {
+export function useCustomer(id?: number) {
   const { data, error } = useSWR<CustomerResponse>(
-    `/api/customers/${id}`,
+    id ? `/api/customers/${id}` : null,
     fetcher
   );
 

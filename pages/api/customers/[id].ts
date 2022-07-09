@@ -49,16 +49,21 @@ export default async function handler(
     }
   } else if (req.method === "PUT") {
     try {
+      const { address, ...customer } = req.body;
+
       const updatedCustomer = await prisma.customer.update({
         where: {
           id: Number(id),
         },
-        data: {
-          ...req.body,
-        },
+        data: customer,
       });
 
-      res.status(200).json(updatedCustomer);
+      const updatedAddress = await prisma.address.update({
+        where: { id: customer.addressId },
+        data: address,
+      });
+
+      res.status(200).json({ ...updatedCustomer, ...updatedAddress });
     } catch (e) {
       invariant(e instanceof Error, "Customer not updated");
 

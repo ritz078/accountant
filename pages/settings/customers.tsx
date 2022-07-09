@@ -4,11 +4,12 @@ import { deleteCustomer, useCustomers } from "@/data/customer";
 import { CustomerResponse } from "@/types/customer";
 import { invariant } from "@/utils/invariant";
 import { NextPage } from "next";
-import { ComponentProps } from "pages/_app";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { TrashIcon } from "@heroicons/react/outline";
+import { SlideOverContext, SlideOverType } from "@/contexts/slideOver";
 
-const Settings: NextPage<ComponentProps> = ({ setShowAddCustomerForm }) => {
+const Settings: NextPage<{}> = () => {
+  const { setSlideOver } = useContext(SlideOverContext);
   const { data: customers } = useCustomers();
   const [showDeleteModal, toggleDeleteModal] =
     useState<CustomerResponse | null>(null);
@@ -19,7 +20,7 @@ const Settings: NextPage<ComponentProps> = ({ setShowAddCustomerForm }) => {
     <SettingsLayout
       label="Customers"
       buttonText="Add Customer"
-      onButtonClick={() => setShowAddCustomerForm(true)}
+      onButtonClick={() => setSlideOver({ type: SlideOverType.ADD_CUSTOMER })}
     >
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -81,12 +82,17 @@ const Settings: NextPage<ComponentProps> = ({ setShowAddCustomerForm }) => {
                       </td>
 
                       <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                        <a
-                          href="#"
-                          className="text-indigo-600 hover:text-indigo-900"
+                        <span
+                          onClick={() =>
+                            setSlideOver({
+                              type: SlideOverType.EDIT_CUSTOMER,
+                              payload: customer.id,
+                            })
+                          }
+                          className="cursor-pointer text-indigo-600 hover:text-indigo-900"
                         >
                           Edit
-                        </a>
+                        </span>
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                         <a

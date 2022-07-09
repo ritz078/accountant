@@ -10,10 +10,10 @@ import {
   ViewListIcon,
 } from "@heroicons/react/outline";
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useMemo } from "react";
+import { Fragment, useContext, useMemo } from "react";
 import classNames from "classnames";
 import Link from "next/link";
-import { ComponentProps } from "./_app";
+import { SlideOverContext, SlideOverType } from "@/contexts/slideOver";
 
 const stats = [
   {
@@ -36,10 +36,9 @@ const stats = [
   },
 ];
 
-const Home: NextPage<ComponentProps> = ({
-  setShowAddTaxForm,
-  setShowAddCustomerForm,
-}) => {
+const Home: NextPage<{}> = () => {
+  const { setSlideOver } = useContext(SlideOverContext);
+
   const createMenuList = useMemo(
     () => [
       {
@@ -50,20 +49,29 @@ const Home: NextPage<ComponentProps> = ({
       {
         Icon: ViewListIcon,
         label: "Expense",
-        onClick: () => setShowAddTaxForm(true),
+        onClick: () =>
+          setSlideOver({
+            type: SlideOverType.ADD_TAX_PRESET,
+          }),
       },
       {
         Icon: OfficeBuildingIcon,
         label: "Customer",
-        onClick: () => setShowAddCustomerForm(true),
+        onClick: () =>
+          setSlideOver({
+            type: SlideOverType.ADD_CUSTOMER,
+          }),
       },
       {
         Icon: ReceiptTaxIcon,
         label: "Tax",
-        onClick: () => setShowAddTaxForm(true),
+        onClick: () =>
+          setSlideOver({
+            type: SlideOverType.ADD_TAX_PRESET,
+          }),
       },
     ],
-    [setShowAddCustomerForm, setShowAddTaxForm]
+    [setSlideOver]
   );
 
   return (
@@ -100,7 +108,7 @@ const Home: NextPage<ComponentProps> = ({
                     <Menu.Item>
                       {({ active }) =>
                         href ? (
-                          <Link href="/Invoice">
+                          <Link href="/invoice">
                             <a
                               className={classNames(
                                 active

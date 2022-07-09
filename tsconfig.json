@@ -20,21 +20,7 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/utils/*": [
-        "./utils/*"
-      ],
-      "@/components/*": [
-        "./components/*"
-      ],
-      "@/styles/*": [
-        "./styles/*"
-      ],
-      "@/types/*": [
-        "./types/*"
-      ],
-      "@/data/*": [
-        "./data/*"
-      ],
+      "@/*": ["./*"]
     }
   },
   "include": [

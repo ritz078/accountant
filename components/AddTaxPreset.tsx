@@ -5,23 +5,35 @@ import * as Yup from "yup";
 import classNames from "classnames";
 import { TextArea } from "./TextArea";
 import { TaxDraft } from "@/types/tax";
-import { createTaxPreset, useTaxes } from "@/data/taxes";
+import {
+  createTaxPreset,
+  updateTaxPreset,
+  useTax,
+  useTaxes,
+} from "@/data/taxes";
+import { Tax } from "@prisma/client";
 
 export const AddTaxPreset: FC<{
   onClose: () => void;
-}> = ({ onClose }) => {
+  taxId?: number;
+}> = ({ onClose, taxId }) => {
   const { mutate } = useTaxes();
+  const { data: tax } = useTax(taxId);
 
-  const formik = useFormik<TaxDraft>({
-    initialValues: {
+  const formik = useFormik<TaxDraft | Tax>({
+    initialValues: tax || {
       type: "percentage",
       name: "",
       value: 0,
       description: "",
     },
     onSubmit: async (values: TaxDraft) => {
-      await createTaxPreset(values);
-      mutate();
+      if (taxId) {
+        await updateTaxPreset(values as Tax);
+      } else {
+        await createTaxPreset(values);
+      }
+      await mutate();
       onClose();
     },
     validationSchema: Yup.object().shape({
@@ -30,6 +42,7 @@ export const AddTaxPreset: FC<{
       value: Yup.number().required("Required"),
       type: Yup.string().required("Required"),
     }),
+    enableReinitialize: !!taxId,
   });
 
   return (

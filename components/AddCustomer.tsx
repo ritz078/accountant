@@ -3,23 +3,36 @@ import React, { FC } from "react";
 import classNames from "classnames";
 import { CurrencySelect } from "./Select/CurrencySelect";
 import { useFormik } from "formik";
-import { CustomerDraft } from "@/types/customer";
+import { CustomerDraft, CustomerResponse } from "@/types/customer";
 import { customerInitialValue, customerSchema } from "@/utils/forms/customer";
-import { createCustomer, useCustomers } from "@/data/customer";
+import {
+  createCustomer,
+  updateCustomer,
+  useCustomer,
+  useCustomers,
+} from "@/data/customer";
 
 export const AddCustomer: FC<{
   onClose: () => void;
-}> = ({ onClose }) => {
+  customerId?: number;
+}> = ({ onClose, customerId }) => {
   const { mutate } = useCustomers();
 
-  const formik = useFormik<CustomerDraft>({
-    initialValues: customerInitialValue,
+  const { data: customer } = useCustomer(customerId);
+
+  const formik = useFormik<CustomerDraft | CustomerResponse>({
+    initialValues: customer || customerInitialValue,
     onSubmit: async (values) => {
-      await createCustomer(values);
-      mutate();
+      if (customer) {
+        await updateCustomer(values as CustomerResponse);
+      } else {
+        await createCustomer(values);
+      }
+      await mutate();
       onClose();
     },
     validationSchema: customerSchema,
+    enableReinitialize: !!customerId,
   });
 
   return (

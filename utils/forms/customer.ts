@@ -1,4 +1,3 @@
-
 import * as Yup from "yup";
 
 export const customerInitialValue = {
@@ -17,7 +16,7 @@ export const customerInitialValue = {
   notes: null,
   vatin: null,
   gstin: null,
-  logo: ""
+  logo: "",
 };
 
 export const customerSchema = Yup.object().shape({

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { useMeta } from "@/data/useMeta";
 import { useCustomers } from "@/data/customer";
 import { useTaxes } from "@/data/taxes";
@@ -18,18 +18,19 @@ import { SlideOver } from "@/components/SlideOver";
 import { AddItemForm } from "@/components/AddItemForm";
 import { CurrencySelect } from "@/components/Select/CurrencySelect";
 import { createInvoice, updateInvoice, useInvoices } from "@/data/invoices";
+import { SlideOverContext, SlideOverType } from "@/contexts/slideOver";
 
 export const Invoice: React.FC<{
-  setShowAddTaxForm: (show: boolean) => void;
-  setShowAddCustomerForm: (show: boolean) => void;
   invoice?: IInvoice;
-}> = ({ setShowAddTaxForm, setShowAddCustomerForm, invoice }) => {
+}> = ({ invoice }) => {
   const [showAddItemModal, setShowAddItemModal] = useState(false);
   const { data: metaData } = useMeta();
   const { data: customers } = useCustomers();
   const { data: taxPresets } = useTaxes();
   const { data: items } = useInvoiceItems();
   const { mutate } = useInvoices();
+
+  const { setSlideOver } = useContext(SlideOverContext);
 
   const formik = useFormik<IInvoice>({
     initialValues:
@@ -46,7 +47,6 @@ export const Invoice: React.FC<{
         currencyCode: "INR",
       } as never),
     onSubmit: async (values) => {
-      debugger;
       await (invoice ? updateInvoice(values) : createInvoice(values));
       await mutate();
     },
@@ -96,7 +96,11 @@ export const Invoice: React.FC<{
                     </div>
 
                     <button
-                      onClick={() => setShowAddCustomerForm(true)}
+                      onClick={() =>
+                        setSlideOver({
+                          type: SlideOverType.ADD_CUSTOMER,
+                        })
+                      }
                       type="button"
                       className="inline-flex h-fit items-center self-end rounded-full border border-transparent bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
@@ -390,7 +394,11 @@ export const Invoice: React.FC<{
                     currencySymbol={currencySymbol}
                     items={taxPresets}
                     applied={values.taxes}
-                    onCreate={() => setShowAddTaxForm(true)}
+                    onCreate={() =>
+                      setSlideOver({
+                        type: SlideOverType.ADD_TAX_PRESET,
+                      })
+                    }
                     onToggle={(tax) => {
                       if (values.taxes.includes(tax)) {
                         setFieldValue(

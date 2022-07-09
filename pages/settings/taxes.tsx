@@ -1,13 +1,23 @@
 import { SettingsLayout } from "@/components/SettingsLayout";
 import { useTaxes } from "@/data/taxes";
 import { NextPage } from "next";
-import { ComponentProps } from "pages/_app";
+import { useContext } from "react";
+import { SlideOverContext, SlideOverType } from "@/contexts/slideOver";
 
-const Taxes: NextPage<ComponentProps>  = ({setShowAddTaxForm}) => {
+const Taxes: NextPage<{}> = () => {
+  const { setSlideOver } = useContext(SlideOverContext);
   const { data: taxes } = useTaxes();
 
   return (
-    <SettingsLayout label="Taxes" buttonText="Add Tax" onButtonClick={() => setShowAddTaxForm(true)}>
+    <SettingsLayout
+      label="Taxes"
+      buttonText="Add Tax"
+      onButtonClick={() =>
+        setSlideOver({
+          type: SlideOverType.ADD_TAX_PRESET,
+        })
+      }
+    >
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -52,12 +62,17 @@ const Taxes: NextPage<ComponentProps>  = ({setShowAddTaxForm}) => {
                           : `${tax.value}`}
                       </td>
                       <td className="px-6 py-4 text-right text-sm font-medium">
-                        <a
-                          href="#"
-                          className="text-indigo-600 hover:text-indigo-900"
+                        <span
+                          onClick={() =>
+                            setSlideOver({
+                              type: SlideOverType.EDIT_TAX_PRESET,
+                              payload: tax.id,
+                            })
+                          }
+                          className="cursor-pointer text-indigo-600 hover:text-indigo-900"
                         >
                           Edit
-                        </a>
+                        </span>
                       </td>
 
                       <td className="px-6 py-4 text-right text-sm font-medium">
