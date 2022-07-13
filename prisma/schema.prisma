@@ -28,8 +28,8 @@ model Settings {
   updatedAt    DateTime @map("updated_at")
   currencyCode String
   addressId    Int
-  address      Address  @relation(fields: [addressId], references: [id])
-  currency     Currency @relation(fields: [currencyCode], references: [code])
+  address      Address  @relation(fields: [addressId], references: [id], onDelete: SetNull)
+  currency     Currency @relation(fields: [currencyCode], references: [code], onDelete: SetNull, onUpdate: Cascade)
 
   @@map("settings")
 }
@@ -89,7 +89,8 @@ model Address {
   country   String
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @default(now()) @map("updated_at")
-  Customer  Customer[]
+  customerId Int       @map("customer_id") @unique
+  customer  Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
   Settings  Settings[]
   User      User[]
 }
@@ -106,9 +107,8 @@ model Customer {
   vatin        String?
   gstin        String?
   logo         String?
-  addressId    Int       @map("address_id")
-  address      Address   @relation(fields: [addressId], references: [id])
-  currency     Currency  @relation(fields: [currencyCode], references: [code])
+  address      Address?
+  currency     Currency  @relation(fields: [currencyCode], references: [code], onDelete: SetNull, onUpdate: Cascade)
   Invoice      Invoice[]
 
   @@map("customers")
@@ -138,7 +138,7 @@ model InvoiceItem {
   notes        String?
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @map("updated_at")
-  currency     Currency @relation(fields: [currencyCode], references: [code])
+  currency     Currency @relation(fields: [currencyCode], references: [code], onDelete: SetNull, onUpdate: Cascade)
   taxes        Tax[]
 
   @@map("invoice_items")
@@ -157,8 +157,8 @@ model Invoice {
   total         Float
   status        InvoiceStatus
   items         Json
-  currency      Currency      @relation(fields: [currencyCode], references: [code])
-  customer      Customer      @relation(fields: [customerId], references: [id])
+  currency      Currency      @relation(fields: [currencyCode], references: [code], onDelete: SetNull, onUpdate: Cascade)
+  customer      Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
   taxes         Tax[]
 
   @@map("invoices")

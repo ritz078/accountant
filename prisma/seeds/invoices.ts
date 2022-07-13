@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { taxes } from "./taxes";
 
-export const invoices = new Array(15).fill(null).map(() => ({
+export const invoices = new Array(150).fill(null).map(() => ({
   invoiceNumber: faker.datatype.number({ min: 100000, max: 999999 }),
   issueDate: faker.date.past(),
   dueDate: faker.date.future(),

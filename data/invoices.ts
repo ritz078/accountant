@@ -1,9 +1,13 @@
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { IInvoice } from "@/types/invoice";
+import { INVOICES_PER_PAGE } from "@/constants/config";
 
-export function useInvoices() {
-  const { data, error, mutate } = useSWR<IInvoice[]>("/api/invoices", fetcher);
+export function useInvoices(pageIndex = 0) {
+  const { data, error, mutate } = useSWR<{
+    data: IInvoice[];
+    totalCount: number;
+  }>(`/api/invoices?page=${pageIndex}&limit=${INVOICES_PER_PAGE}`, fetcher);
 
   return {
     data,

@@ -7,7 +7,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const taxes = await prisma.tax.findMany();
+    const taxes = await prisma.tax.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
     res.status(200).json(taxes);
   } else if (req.method === "POST") {

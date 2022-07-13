@@ -1,0 +1,11 @@
+.pageChange {
+  @apply relative ml-3 inline-flex cursor-pointer rounded-full bg-white p-1 font-medium text-gray-700 hover:bg-gray-50;
+}
+
+.disabled {
+  @apply pointer-events-none opacity-50;
+}
+
+.th {
+  @apply py-3 pl-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500;
+}

@@ -1,13 +1,31 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/utils/prisma";
+import { INVOICES_PER_PAGE } from "@/constants/config";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "GET") {
-    const invoices = await prisma.invoice.findMany();
+  const { page = "0", limit = INVOICES_PER_PAGE } = req.query as {
+    page: string;
+    limit: string;
+  };
 
-    res.status(200).json(invoices);
+  if (req.method === "GET") {
+    const [invoices, count] = await prisma.$transaction([
+      prisma.invoice.findMany({
+        skip: +page * +limit,
+        take: +limit,
+        orderBy: {
+          createdAt: "desc",
+        },
+      }),
+      prisma.invoice.count(),
+    ]);
+
+    res.status(200).json({
+      data: invoices,
+      totalCount: count,
+    });
   }
 }

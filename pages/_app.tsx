@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import NextProgress from "next-progress";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { SlideOver } from "@/components/SlideOver";
-import React, { useCallback } from "react";
+import React from "react";
 import { AddTaxPreset } from "@/components/AddTaxPreset";
 import { AddCustomer } from "@/components/AddCustomer";
 import { AddItemForm } from "@/components/AddItemForm";
@@ -24,9 +24,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     type: SlideOverType.NONE,
   });
 
-  const closeSlider = useCallback(() => {
+  const closeSlider = () => {
     setSlideOver({ type: SlideOverType.NONE, payload: undefined });
-  }, [setSlideOver]);
+  };
 
   if (!data) return <NextProgress />;
 

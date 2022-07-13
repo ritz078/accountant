@@ -34,6 +34,9 @@ export default async function handler(
   } else if (req.method === "GET") {
     const customers = await prisma.customer.findMany({
       include: { address: true },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     res.status(200).json(customers);

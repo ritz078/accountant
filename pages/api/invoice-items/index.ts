@@ -10,6 +10,9 @@ export default async function handler(
       include: {
         taxes: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     res.status(200).json(invoiceItems);

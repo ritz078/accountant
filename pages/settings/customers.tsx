@@ -10,7 +10,7 @@ import { SlideOverContext, SlideOverType } from "@/contexts/slideOver";
 
 const Settings: NextPage<{}> = () => {
   const { setSlideOver } = useContext(SlideOverContext);
-  const { data: customers } = useCustomers();
+  const { data: customers, mutate } = useCustomers();
   const [showDeleteModal, toggleDeleteModal] =
     useState<CustomerResponse | null>(null);
 
@@ -115,7 +115,15 @@ const Settings: NextPage<{}> = () => {
           show={!!showDeleteModal}
           onConfirm={async () => {
             invariant(showDeleteModal, "`showDeleteModal` is null");
-            await deleteCustomer(showDeleteModal.id);
+
+            try {
+              await deleteCustomer(showDeleteModal.id);
+              await mutate();
+            } catch (e) {
+              console.error(e);
+            }
+
+            toggleDeleteModal(null);
           }}
           Icon={TrashIcon}
           onClose={() => toggleDeleteModal(null)}

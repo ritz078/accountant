@@ -7,12 +7,21 @@ import { useState } from "react";
 import { Transition } from "@headlessui/react";
 import { IInvoice } from "@/types/invoice";
 import { useInvoices } from "@/data/invoices";
+import { INVOICES_PER_PAGE } from "@/constants/config";
+import classNames from "classnames";
+import cns from "@/styles/invoices.module.scss";
 
 const Invoices: NextPage = () => {
+  const [pageIndex, setPageIndex] = useState(0);
   const [invoice, setInvoice] = useState<IInvoice | null>(null);
-  const { data: invoices } = useInvoices();
+  const { data } = useInvoices(pageIndex);
 
-  if (!invoices) return null;
+  // cache next page invoices
+  useInvoices(pageIndex + 1);
+
+  if (!data?.data) return null;
+
+  const invoices = data.data;
 
   return (
     <div className="flex flex-1 flex-row">
@@ -44,29 +53,17 @@ const Invoices: NextPage = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th
-                        scope="col"
-                        className="py-3 pl-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
+                      <th scope="col" className={cns.th}>
                         Date
                       </th>
-                      <th
-                        scope="col"
-                        className="py-3 pl-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
+                      <th scope="col" className={cns.th}>
                         #
                       </th>
-                      <th
-                        scope="col"
-                        className="py-3 pl-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
+                      <th scope="col" className={cns.th}>
                         Customer
                       </th>
-                      <th className="py-3 pl-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500" />
-                      <th
-                        scope="col"
-                        className="py-3 pl-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                      >
+                      <th className={cns.th} />
+                      <th scope="col" className={cns.th}>
                         Amount
                       </th>
                       <th scope="col" className="relative py-3 pl-6">
@@ -97,24 +94,35 @@ const Invoices: NextPage = () => {
         >
           <div className="hidden sm:block">
             <p className="text-sm text-gray-700">
-              Showing <span className="font-medium">1</span> to{" "}
-              <span className="font-medium">10</span> of{" "}
-              <span className="font-medium">20</span> results
+              Showing{" "}
+              <span className="font-medium">
+                {pageIndex * INVOICES_PER_PAGE + 1}
+              </span>{" "}
+              to{" "}
+              <span className="font-medium">
+                {(pageIndex + 1) * INVOICES_PER_PAGE}
+              </span>{" "}
+              of <span className="font-medium">{data.totalCount}</span> results
             </p>
           </div>
           <div className="flex flex-1 justify-between sm:justify-end">
-            <a
-              href="#"
-              className="relative inline-flex rounded-full bg-white p-1 font-medium text-gray-700 hover:bg-gray-50"
+            <span
+              onClick={() => setPageIndex(pageIndex - 1)}
+              className={classNames(cns.pageChange, {
+                [cns.disabled]: pageIndex === 0,
+              })}
             >
               <ChevronLeftIcon className="h-6 w-6 text-gray-500" />
-            </a>
-            <a
-              href="#"
-              className="relative ml-3 inline-flex rounded-full bg-white p-1 font-medium text-gray-700 hover:bg-gray-50"
+            </span>
+            <span
+              onClick={() => setPageIndex(pageIndex + 1)}
+              className={classNames(cns.pageChange, {
+                [cns.disabled]:
+                  pageIndex + 1 >= data.totalCount / INVOICES_PER_PAGE,
+              })}
             >
               <ChevronRightIcon className="h-6 w-6 text-gray-500" />
-            </a>
+            </span>
           </div>
         </nav>
       </div>
