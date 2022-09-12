@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { InvoiceDetails } from "@/components/invoices/InvoiceDetails";
 import { InvoiceInfo } from "@/components/invoices/InvoiceInfo";
 import Link from "next/link";

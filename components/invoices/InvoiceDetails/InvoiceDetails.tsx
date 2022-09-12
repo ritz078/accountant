@@ -2,7 +2,11 @@ import { FC } from "react";
 import { format } from "date-fns";
 import classNames from "classnames";
 import { formatNumber } from "@/utils/number";
-import { CheckIcon, ThumbUpIcon, UserIcon } from "@heroicons/react/outline";
+import {
+  CheckIcon,
+  HandThumbUpIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
 import { IInvoice } from "@/types/invoice";
 import { useMeta } from "@/data/useMeta";
 import { useCustomers } from "@/data/customer";
@@ -25,7 +29,7 @@ const timeline = [
     href: "#",
     date: "Sep 22",
     datetime: "2020-09-22",
-    icon: ThumbUpIcon,
+    icon: HandThumbUpIcon,
     iconBackground: "bg-blue-500",
   },
   {
@@ -45,7 +49,7 @@ const timeline = [
     href: "#",
     date: "Sep 30",
     datetime: "2020-09-30",
-    icon: ThumbUpIcon,
+    icon: HandThumbUpIcon,
     iconBackground: "bg-blue-500",
   },
 ];

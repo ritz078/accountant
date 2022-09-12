@@ -37,7 +37,7 @@ export const Input: FC<IInputProps> = ({
           name={name}
           id={name}
           className={classNames(
-            "block w-full rounded-md border-gray-200 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+            "block w-full rounded-md border-gray-200 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
             {
               "mt-1": label,
               "pl-7": prefix,

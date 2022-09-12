@@ -12,6 +12,7 @@ model User {
   name       String?
   email      String?   @unique
   image      String?
+  gstin      String?   @unique
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime  @map("updated_at")
   currencyId Int?
@@ -105,7 +106,7 @@ model Customer {
   notes        String?
   currencyCode String    @map("currency_code")
   vatin        String?
-  gstin        String?
+  gstin        String?  @unique
   logo         String?
   address      Address?
   currency     Currency  @relation(fields: [currencyCode], references: [code], onDelete: SetNull, onUpdate: Cascade)

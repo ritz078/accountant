@@ -1,9 +1,9 @@
 import { Menu, Transition } from "@headlessui/react";
 import {
-  DotsVerticalIcon,
-  PencilAltIcon,
+  EllipsisVerticalIcon,
+  PencilSquareIcon,
   TrashIcon,
-} from "@heroicons/react/outline";
+} from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
 import classNames from "classnames";
 import { AlertModal } from "../AlertModal";
@@ -127,7 +127,7 @@ export const InvoiceInfo = ({
                 )}
               >
                 <span className="sr-only">Open options</span>
-                <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
+                <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
               </Menu.Button>
             </div>
 
@@ -153,7 +153,7 @@ export const InvoiceInfo = ({
                           "group flex items-center px-4 py-2 text-sm"
                         )}
                       >
-                        <PencilAltIcon
+                        <PencilSquareIcon
                           className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                           aria-hidden="true"
                         />

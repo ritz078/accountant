@@ -1,13 +1,13 @@
 import React, { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ExclamationIcon } from "@heroicons/react/outline";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 
 export const AlertModal: React.FC<IAlertModalProps> = ({
   show,
   onClose,
   title,
   description,
-  Icon = ExclamationIcon,
+  Icon = ExclamationCircleIcon,
   confirmationLabel = "OK",
   onConfirm,
 }) => {

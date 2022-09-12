@@ -3,12 +3,12 @@ import {
   ChevronDownIcon,
   DocumentIcon,
   MinusCircleIcon,
-  OfficeBuildingIcon,
+  BuildingOfficeIcon,
   PlusCircleIcon,
-  ReceiptTaxIcon,
-  TrendingUpIcon,
-  ViewListIcon,
-} from "@heroicons/react/outline";
+  BanknotesIcon,
+  ArrowTrendingUpIcon,
+  ListBulletIcon,
+} from "@heroicons/react/24/outline";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment, useContext, useMemo } from "react";
 import classNames from "classnames";
@@ -31,7 +31,7 @@ const stats = [
   {
     name: "Profit",
     stat: "58.16",
-    icon: TrendingUpIcon,
+    icon: ArrowTrendingUpIcon,
     color: "green",
   },
 ];
@@ -47,7 +47,7 @@ const Home: NextPage<{}> = () => {
         href: "/invoice",
       },
       {
-        Icon: ViewListIcon,
+        Icon: ListBulletIcon,
         label: "Expense",
         onClick: () =>
           setSlideOver({
@@ -55,7 +55,7 @@ const Home: NextPage<{}> = () => {
           }),
       },
       {
-        Icon: OfficeBuildingIcon,
+        Icon: BuildingOfficeIcon,
         label: "Customer",
         onClick: () =>
           setSlideOver({
@@ -63,7 +63,7 @@ const Home: NextPage<{}> = () => {
           }),
       },
       {
-        Icon: ReceiptTaxIcon,
+        Icon: BanknotesIcon,
         label: "Tax",
         onClick: () =>
           setSlideOver({

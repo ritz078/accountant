@@ -5,7 +5,7 @@ export const customers = new Array(6).fill(null).map(() => ({
   phone: faker.phone.number(),
   email: faker.internet.email().toLowerCase(),
   vatin: null,
-  gstin: "ABXDJ2365H",
+  gstin: faker.finance.account(),
   notes: faker.lorem.paragraph(),
   updatedAt: faker.date.recent(),
   logo: faker.internet.avatar(),
