@@ -14,6 +14,7 @@ export const Input: FC<IInputProps> = ({
   min,
   prefix,
   error,
+  onBlur,
 }) => {
   return (
     <div className={className}>
@@ -36,8 +37,10 @@ export const Input: FC<IInputProps> = ({
           type={type}
           name={name}
           id={name}
+          onBlur={onBlur}
+          autoComplete={"off"}
           className={classNames(
-            "block w-full rounded-md border-gray-200 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+            "block w-full rounded-md border-gray-200 text-gray-600 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
             {
               "mt-1": label,
               "pl-7": prefix,
@@ -62,6 +65,7 @@ interface IInputProps {
   placeholder?: string;
   className?: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur?: React.ChangeEventHandler<HTMLInputElement>;
   inputClassName?: string;
   value?: string | number | null;
   required?: boolean;

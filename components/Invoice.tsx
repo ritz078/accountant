@@ -8,7 +8,7 @@ import { IInvoice } from "@/types/invoice";
 import { addDays, format, parseISO } from "date-fns";
 import { getAmount, getTotalInvoiceAmount, schema } from "@/utils/invoice";
 import { Select } from "@/components/Select/Select";
-import { PlusSmIcon, TrashIcon } from "@heroicons/react/outline";
+import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { Input } from "@/components/Input";
 import { AddTaxOrDiscount } from "@/components/CreateInvoice/AddTaxOrDiscount";
 import { formatNumber } from "@/utils/number";
@@ -104,23 +104,28 @@ export const Invoice: React.FC<{
                       type="button"
                       className="inline-flex h-fit items-center self-end rounded-full border border-transparent bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                      <PlusSmIcon className="h-5 w-5" aria-hidden="true" />
+                      <PlusIcon className="h-5 w-5" aria-hidden="true" />
                     </button>
                   </div>
-                  <div className="mt-5 rounded-sm border border-gray-200 bg-gray-100 bg-opacity-50 p-4 text-sm text-gray-900">
-                    <div>{address?.line1}</div>
-                    <div>{address?.line2}</div>
-                    <div>
-                      {address?.city}-{address?.pin}
-                    </div>
-                    <div>
-                      {address?.state}, {address?.country}
-                    </div>
-                  </div>
 
-                  <div className="mt-2 cursor-pointer text-right text-sm text-indigo-600 hover:underline">
-                    Edit Customer Details
-                  </div>
+                  {address && (
+                    <>
+                      <div className="mt-5 rounded-sm border border-gray-200 bg-gray-100 bg-opacity-50 p-4 text-sm text-gray-900">
+                        <div>{address.line1}</div>
+                        <div>{address.line2}</div>
+                        <div>
+                          {address.city}-{address.pin}
+                        </div>
+                        <div>
+                          {address.state}, {address.country}
+                        </div>
+                      </div>
+
+                      <div className="mt-2 cursor-pointer text-right text-sm text-indigo-600 hover:underline">
+                        Edit Customer Details
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div className="flex flex-1 flex-col gap-2">

@@ -1,9 +1,9 @@
 import {
   BellIcon,
-  OfficeBuildingIcon,
-  ReceiptTaxIcon,
+  BuildingOfficeIcon,
+  BanknotesIcon,
   UserIcon,
-} from "@heroicons/react/outline";
+} from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -15,12 +15,12 @@ const routes = [
     options: [
       {
         label: "Customers",
-        icon: OfficeBuildingIcon,
+        icon: BuildingOfficeIcon,
         href: "/settings/customers",
       },
       {
         label: "Taxes",
-        icon: ReceiptTaxIcon,
+        icon: BanknotesIcon,
         href: "/settings/taxes",
       },
     ],

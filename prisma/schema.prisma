@@ -165,6 +165,21 @@ model Invoice {
   @@map("invoices")
 }
 
+model Expense {
+    id           Int      @id @default(autoincrement())
+    name         String
+    description  String?
+    amount       Float
+    currencyCode String   @map("currency_code")
+    createdAt    DateTime @default(now()) @map("created_at")
+    updatedAt    DateTime @map("updated_at")
+    currency     Currency @relation(fields: [currencyCode], references: [code], onDelete: SetNull, onUpdate: Cascade)
+    file         String?
+    hasGST       Boolean  @map("has_gst")
+
+    @@map("expenses")
+}
+
 enum TaxType {
   percentage
   fixed

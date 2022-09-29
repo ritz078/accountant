@@ -1,5 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
-import { PlusIcon, PlusSmIcon } from "@heroicons/react/outline";
+import { PlusIcon, PlusSmallIcon } from "@heroicons/react/24/outline";
 import React, { FC, Fragment } from "react";
 import classNames from "classnames";
 import { formatNumber } from "@/utils/number";
@@ -17,7 +17,7 @@ export const AddItem: FC<IAddItemProps> = ({
         <Menu.Button>
           {button || (
             <div className="inline-flex items-center rounded-full border border-indigo-300 bg-indigo-100 px-4 py-1.5 text-sm font-medium leading-5 text-indigo-600 shadow-sm hover:bg-indigo-200 focus:outline-none">
-              <PlusSmIcon
+              <PlusSmallIcon
                 className={"-ml-1.5 mr-1 h-5 w-5 text-indigo-600"}
                 aria-hidden="true"
               />

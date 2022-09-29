@@ -1,5 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
-import { CheckIcon, PlusIcon } from "@heroicons/react/outline";
+import { CheckIcon, PlusIcon } from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";
 import classNames from "classnames";
 import { Tax } from "@prisma/client";

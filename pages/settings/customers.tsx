@@ -5,7 +5,7 @@ import { CustomerResponse } from "@/types/customer";
 import { invariant } from "@/utils/invariant";
 import { NextPage } from "next";
 import { useContext, useState } from "react";
-import { TrashIcon } from "@heroicons/react/outline";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { SlideOverContext, SlideOverType } from "@/contexts/slideOver";
 
 const Settings: NextPage<{}> = () => {

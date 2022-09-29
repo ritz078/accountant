@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import { Input } from "@/components/Input";
 import { useFormik } from "formik";
 import { Address, User } from "@prisma/client";
+import * as Yup from "yup";
 
 const Account: NextPage = () => {
   const formik = useFormik<
@@ -14,13 +15,21 @@ const Account: NextPage = () => {
     initialValues: {
       address: {},
     },
+    validationSchema: Yup.object({
+      gstin: Yup.string()
+        .matches(
+          /d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}/,
+          "Invalid GSTIN"
+        )
+        .required("Required"),
+    }),
   });
 
   return (
     <SettingsLayout label="Account">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-          <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+          <div className="overflow-hidden border-b border-gray-200 bg-white pb-3 shadow sm:rounded-lg">
             <div className="bg-white sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-b sm:border-gray-200  sm:p-4">
               <label
                 htmlFor="last-name"
@@ -65,6 +74,12 @@ const Account: NextPage = () => {
                   name="gstin"
                   onChange={formik.handleChange}
                   value={formik.values.gstin}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.gstin &&
+                    formik.errors.gstin &&
+                    !!formik.values.gstin?.length
+                  }
                 />
               </div>
             </div>
@@ -123,6 +138,13 @@ const Account: NextPage = () => {
                 />
               </div>
             </div>
+
+            <button
+              type="button"
+              className="float-right mr-4 flex inline-flex items-center self-end rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Save
+            </button>
           </div>
         </div>
       </div>

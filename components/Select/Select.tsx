@@ -1,5 +1,5 @@
-import { Combobox, Listbox, Transition } from "@headlessui/react";
-import { SelectorIcon } from "@heroicons/react/outline";
+import { Listbox, Transition } from "@headlessui/react";
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import classNames from "classnames";
 
@@ -68,7 +68,7 @@ export function Select<T extends IOption = IOption>({
                 {onRenderLabel?.(value) || value?.name || placeholder}
               </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <SelectorIcon
+                <ChevronUpDownIcon
                   className="h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />

@@ -21,7 +21,7 @@ export const AddCustomer: FC<{
   const { data: customer } = useCustomer(customerId);
 
   const formik = useFormik<CustomerDraft | CustomerResponse>({
-    initialValues: customer || customerInitialValue,
+    initialValues: customer || (customerInitialValue as any),
     onSubmit: async (values) => {
       if (customer) {
         await updateCustomer(values as CustomerResponse);
