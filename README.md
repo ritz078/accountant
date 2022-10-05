@@ -1,3 +1,7 @@
+# Accountant (WIP)
+
+Invoice Generator, Tax Estimator and more for freelancers.
+
 ## Getting Started
 
 - Run `npx prisma db push && npx prisma db seed`
