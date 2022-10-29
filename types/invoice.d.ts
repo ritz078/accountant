@@ -5,4 +5,4 @@ export type IInvoice = Invoice & {
     taxes: Tax[];
   })[];
   taxes: Tax[];
-}
+};
