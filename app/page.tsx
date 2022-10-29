@@ -1,3 +1,5 @@
+"use client";
+
 import type { NextPage } from "next";
 import {
   ChevronDownIcon,
@@ -109,7 +111,7 @@ const Home: NextPage<{}> = () => {
                       {({ active }) =>
                         href ? (
                           <Link href="/invoice">
-                            <a
+                            <div
                               className={classNames(
                                 active
                                   ? "bg-gray-100 text-gray-900"
@@ -122,7 +124,7 @@ const Home: NextPage<{}> = () => {
                                 aria-hidden="true"
                               />
                               {label}
-                            </a>
+                            </div>
                           </Link>
                         ) : (
                           <span

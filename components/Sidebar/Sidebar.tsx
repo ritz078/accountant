@@ -11,7 +11,7 @@ import {
   CogIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import classNames from "classnames";
 
 const navigation = [
@@ -30,8 +30,9 @@ const navigation = [
 
 export const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
 
-  const router = useRouter();
+  console.log(pathname);
 
   return (
     <aside>
@@ -91,7 +92,7 @@ export const Sidebar = () => {
                 </div>
                 <nav className="mt-5 space-y-1 px-2">
                   {navigation.map((item) => {
-                    const isActive = router.pathname === item.href;
+                    const isActive = pathname === item.href;
 
                     return (
                       <a
@@ -149,11 +150,11 @@ export const Sidebar = () => {
             <nav className="mt-5 flex-1 space-y-1">
               {navigation.map((item) => {
                 const isActive = item.group
-                  ? router.pathname.startsWith(item.group)
-                  : item.href === router.pathname;
+                  ? pathname.startsWith(item.group)
+                  : item.href === pathname;
                 return (
                   <Link key={item.name} href={item.href}>
-                    <a
+                    <div
                       className={classNames(
                         isActive
                           ? "border-indigo-600 bg-indigo-50 text-indigo-600"
@@ -171,7 +172,7 @@ export const Sidebar = () => {
                         aria-hidden="true"
                       />
                       {item.name}
-                    </a>
+                    </div>
                   </Link>
                 );
               })}
