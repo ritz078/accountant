@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import React, { FC } from "react";
 
 const routes = [
@@ -48,7 +48,7 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({
   buttonText,
   onButtonClick,
 }) => {
-  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <div className="flex flex-row">
@@ -56,10 +56,10 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({
         {routes.map((route) => (
           <div key={route.label}>
             {route.options.map((option) => {
-              const isActive = router.pathname === option.href;
+              const isActive = pathname === option.href;
               return (
                 <Link href={option.href} key={option.href}>
-                  <a
+                  <div
                     className={classNames(
                       "group inline-flex w-full items-center px-3 py-2 text-sm font-medium ",
                       {
@@ -77,7 +77,7 @@ export const SettingsLayout: FC<SettingsLayoutProps> = ({
                       })}
                     />
                     {option.label}
-                  </a>
+                  </div>
                 </Link>
               );
             })}

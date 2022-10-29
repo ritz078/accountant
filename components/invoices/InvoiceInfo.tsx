@@ -145,7 +145,7 @@ export const InvoiceInfo = ({
                   <Menu.Item>
                     {({ active }) => (
                       <a
-                        href={`/invoice/${id}`}
+                        href={`/invoices/${id}`}
                         className={classNames(
                           active
                             ? "bg-gray-100 text-gray-900"

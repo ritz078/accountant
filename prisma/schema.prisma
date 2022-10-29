@@ -76,24 +76,25 @@ model Currency {
   Invoice     Invoice[]
   Settings    Settings[]
   User        User[]
+  Expense     Expense[]
 
   @@map("currencies")
 }
 
 model Address {
-  id        Int        @id @default(autoincrement())
-  line1     String     @map("line_1")
-  line2     String?    @map("line_2")
-  city      String
-  state     String
-  pin       String
-  country   String
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @default(now()) @map("updated_at")
-  customerId Int       @map("customer_id") @unique
-  customer  Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  Settings  Settings[]
-  User      User[]
+  id         Int        @id @default(autoincrement())
+  line1      String     @map("line_1")
+  line2      String?    @map("line_2")
+  city       String
+  state      String
+  pin        String
+  country    String
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @default(now()) @map("updated_at")
+  customerId Int        @unique @map("customer_id")
+  customer   Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  Settings   Settings[]
+  User       User[]
 }
 
 model Customer {
@@ -106,7 +107,7 @@ model Customer {
   notes        String?
   currencyCode String    @map("currency_code")
   vatin        String?
-  gstin        String?  @unique
+  gstin        String?   @unique
   logo         String?
   address      Address?
   currency     Currency  @relation(fields: [currencyCode], references: [code], onDelete: SetNull, onUpdate: Cascade)
@@ -166,18 +167,18 @@ model Invoice {
 }
 
 model Expense {
-    id           Int      @id @default(autoincrement())
-    name         String
-    description  String?
-    amount       Float
-    currencyCode String   @map("currency_code")
-    createdAt    DateTime @default(now()) @map("created_at")
-    updatedAt    DateTime @map("updated_at")
-    currency     Currency @relation(fields: [currencyCode], references: [code], onDelete: SetNull, onUpdate: Cascade)
-    file         String?
-    hasGST       Boolean  @map("has_gst")
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String?
+  amount       Float
+  currencyCode String   @map("currency_code")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @map("updated_at")
+  currency     Currency @relation(fields: [currencyCode], references: [code], onDelete: SetNull, onUpdate: Cascade)
+  file         String?
+  hasGST       Boolean  @map("has_gst")
 
-    @@map("expenses")
+  @@map("expenses")
 }
 
 enum TaxType {

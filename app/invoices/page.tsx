@@ -1,3 +1,5 @@
+"use client";
+
 import { NextPage } from "next";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { InvoiceDetails } from "@/components/invoices/InvoiceDetails";
@@ -34,7 +36,7 @@ const Invoices: NextPage = () => {
               </h3>
             </div>
             <div className="ml-4 mt-2 flex-shrink-0">
-              <Link href="/invoice">
+              <Link href="/invoices/create">
                 <button
                   type="button"
                   className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
