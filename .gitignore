@@ -5,3 +5,5 @@ node_modules
 .next
 yarn-error.log
 prisma/migrations
+
+.vscode

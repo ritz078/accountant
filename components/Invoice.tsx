@@ -1,3 +1,5 @@
+"use client";
+
 import React, { Fragment, useContext, useState } from "react";
 import { useMeta } from "@/data/useMeta";
 import { useCustomers } from "@/data/customer";
